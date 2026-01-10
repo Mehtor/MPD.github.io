@@ -199,9 +199,450 @@ function setupEventListeners() {
         }
     }, 60000);
 }
+// JavaScript продолжение (script.js, часть 2)
 
 function showScreen(screenName) {
     state.screen = screenName;
     state.lastUsedTime = Date.now();
     
     // Скрыть все экраны
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.style.display = 'none';
+    });
+    
+    // Показать выбранный экран
+    const screenElement = document.getElementById(`${screenName}-screen`);
+    if (screenElement) {
+        screenElement.style.display = 'flex';
+    }
+    
+    // Обновить UI для экрана
+    switch(screenName) {
+        case 'setup':
+            updateSetupScreen();
+            break;
+        case 'process':
+            updateProcessScreen();
+            break;
+        case 'result':
+            updateResultScreen();
+            break;
+        case 'settings':
+            updateSettingsScreen();
+            break;
+        case 'library':
+            updateLibraryScreen();
+            break;
+        case 'sleep':
+            updateSleepScreen();
+            break;
+    }
+    
+    // Сохранить состояние
+    saveState();
+}
+
+function simulateLoading() {
+    const progressBar = document.getElementById('loading-progress');
+    let progress = 0;
+    
+    const interval = setInterval(() => {
+        progress += 5;
+        progressBar.style.width = `${progress}%`;
+        
+        if (progress >= 100) {
+            clearInterval(interval);
+            // Показать уведомление об обновлении
+            setTimeout(() => {
+                showNotification('Обновление готово', 3000);
+            }, 500);
+        }
+    }, 100);
+}
+
+function updateSetupScreen() {
+    // Обновить индикатор WiFi
+    updateWiFiIndicator();
+    
+    // Скрыть уведомление
+    document.getElementById('notification').style.display = 'none';
+}
+
+function updateProcessScreen() {
+    // Сбросить состояние при начале новой работы
+    if (state.questionNow === 1) {
+        state.flowType = 0;
+        state.previousQuestion = 0;
+        state.familyID = 1;
+    }
+    
+    // Обновить номер вопроса
+    document.getElementById('question-number').textContent = state.questionNow;
+    
+    // Обновить тип потока
+    document.getElementById('flow-type').textContent = 
+        state.flowType === 0 ? 'Основной поток' : 'Видовой поток';
+    
+    // Обновить текст вопросов
+    const questionIndex = (state.questionNow - 1) % data.questions_true.length;
+    document.getElementById('question-true').textContent = 
+        data.questions_true[questionIndex];
+    document.getElementById('question-false').textContent = 
+        data.questions_false[questionIndex];
+    
+    // Подсветить кнопку "Назад" красным для первого вопроса
+    const backBtn = document.getElementById('back-btn');
+    if (state.questionNow === 1 && state.flowType === 0) {
+        backBtn.style.color = '#ff0000';
+    } else {
+        backBtn.style.color = '#e0de97';
+    }
+}
+
+function answerQuestion(answer) {
+    state.lastUsedTime = Date.now();
+    
+    if (answer === 2) { // Кнопка "Назад"
+        if (state.questionNow === 1) {
+            if (state.flowType === 0) {
+                showScreen('setup');
+                return;
+            } else {
+                changeFlow(0);
+                return;
+            }
+        }
+        
+        // Возврат к предыдущему вопросу
+        state.questionNow = state.previousQuestion;
+        showScreen('process');
+        return;
+    }
+    
+    // Сохраняем предыдущий вопрос
+    state.previousQuestion = state.questionNow;
+    
+    // Определяем следующий вопрос
+    if (answer === 1) { // Ответ "Да"
+        state.questionNow = data.goto_if_true[state.questionNow] || 1;
+    } else if (answer === 0) { // Ответ "Нет"
+        state.questionNow = data.goto_if_false[state.questionNow] || 1;
+    }
+    
+    // Проверяем результат
+    if (state.questionNow < 0) {
+        // Показать результат
+        showResult(Math.abs(state.questionNow));
+    } else if (state.questionNow >= 1000) {
+        // Переход к видовому определителю
+        state.familyID = state.questionNow - 1049;
+        changeFlow(1);
+    } else {
+        // Следующий вопрос
+        showScreen('process');
+    }
+    
+    saveState();
+}
+
+function changeFlow(toSpecies) {
+    state.flowType = toSpecies ? 1 : 0;
+    
+    if (toSpecies) {
+        showNotification(`Переход к: ${state.familyID}`, 2000);
+        state.questionNow = 1;
+    }
+    
+    setTimeout(() => {
+        showScreen('process');
+    }, 2000);
+}
+
+function showResult(resultId) {
+    state.screen = 'result';
+    state.pageID = 0;
+    
+    // Обновить заголовок и текст результата
+    const result = data.resultText[resultId] || data.resultText[1];
+    document.getElementById('result-title').textContent = result.title;
+    document.getElementById('result-page-0').querySelector('.result-text').textContent = 
+        result.pages[0];
+    
+    // Обновить индикатор коллекции
+    updateCollectionIndicator(resultId);
+    
+    // Обновить кнопки навигации
+    updateResultNavigation(result.pages.length);
+    
+    showScreen('result');
+}
+
+function updateResultScreen() {
+    const resultId = Math.abs(state.questionNow);
+    const result = data.resultText[resultId] || data.resultText[1];
+    
+    // Показать текущую страницу
+    document.querySelectorAll('.result-page').forEach(page => {
+        page.style.display = 'none';
+    });
+    
+    const currentPage = document.getElementById(`result-page-${state.pageID}`);
+    if (currentPage) {
+        currentPage.style.display = 'block';
+        currentPage.querySelector('.result-text').textContent = 
+            result.pages[state.pageID] || result.pages[0];
+    }
+    
+    // Обновить кнопки навигации
+    updateResultNavigation(result.pages.length);
+    
+    // Обновить индикатор коллекции
+    updateCollectionIndicator(resultId);
+}
+
+function updateCollectionIndicator(resultId) {
+    const indicator = document.getElementById('collection-indicator');
+    const countElement = document.getElementById('collection-count');
+    const saveBtn = document.getElementById('result-save');
+    
+    const count = state.collection[resultId] || 0;
+    
+    if (count > 0) {
+        indicator.style.display = 'flex';
+        countElement.textContent = count;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i><span>Добавить</span>';
+    } else {
+        indicator.style.display = 'none';
+        saveBtn.innerHTML = '<i class="fas fa-save"></i><span>Сохранить</span>';
+    }
+}
+
+function updateResultNavigation(totalPages) {
+    const prevBtn = document.getElementById('result-prev');
+    const nextBtn = document.getElementById('result-next');
+    
+    // Кнопка "Назад"
+    prevBtn.disabled = state.pageID === 0;
+    prevBtn.innerHTML = state.pageID === 0 ? 
+        '<i class="fas fa-arrow-left"></i>' : 
+        '<i class="fas fa-chevron-left"></i>';
+    
+    // Кнопка "Дальше"
+    nextBtn.disabled = state.pageID >= totalPages - 1 || totalPages <= 1;
+    state.canContinueScrolling = !nextBtn.disabled;
+}
+
+function showPrevPage() {
+    if (state.pageID > 0) {
+        state.pageID--;
+        updateResultScreen();
+    }
+}
+
+function showNextPage() {
+    const resultId = Math.abs(state.questionNow);
+    const result = data.resultText[resultId] || data.resultText[1];
+    
+    if (state.pageID < result.pages.length - 1) {
+        state.pageID++;
+        updateResultScreen();
+    }
+}
+
+function toggleSavePlant() {
+    const resultId = Math.abs(state.questionNow);
+    
+    if (!state.collection[resultId]) {
+        state.collection[resultId] = 0;
+    }
+    
+    state.collection[resultId]++;
+    
+    // Сохранить в localStorage
+    localStorage.setItem('plantCollection', JSON.stringify(state.collection));
+    
+    // Обновить индикатор
+    updateCollectionIndicator(resultId);
+    
+    showNotification('Растение сохранено в библиотеку', 2000);
+}
+
+function updateSettingsScreen() {
+    // Обновить список настроек
+    const settingsList = document.querySelector('.settings-list');
+    settingsList.innerHTML = '';
+    
+    const settings = [
+        { id: 'wifi', name: 'Use WiFi', value: state.settings.useWiFi },
+        { id: 'wifi-search', name: 'WiFi Real Time Search', value: state.settings.wifiRealTimeSearch },
+        { id: 'updates', name: 'Check for Updates', value: state.settings.checkForUpdates },
+        { id: 'auto-update', name: 'Auto Update', value: state.settings.autoUpdate },
+        { id: 'debug', name: 'Debug Mode', value: state.settings.debugMode },
+        { id: 'sleep', name: 'Sleeping Mode', value: state.settings.sleepingMode }
+    ];
+    
+    settings.forEach((setting, index) => {
+        const item = document.createElement('div');
+        item.className = 'setting-item';
+        item.setAttribute('data-index', index);
+        
+        item.innerHTML = `
+            <span class="setting-name">${setting.name}</span>
+            <div class="toggle-switch">
+                <input type="checkbox" id="${setting.id}-toggle" ${setting.value ? 'checked' : ''}>
+                <label for="${setting.id}-toggle"></label>
+            </div>
+        `;
+        
+        // Добавить обработчик клика
+        item.addEventListener('click', (e) => {
+            if (!e.target.matches('input')) {
+                const checkbox = item.querySelector('input');
+                checkbox.checked = !checkbox.checked;
+                updateSetting(index, checkbox.checked);
+            }
+        });
+        
+        settingsList.appendChild(item);
+    });
+    
+    // Обновить кнопки навигации
+    const nextBtn = document.getElementById('settings-next');
+    nextBtn.disabled = true; // Только одна страница настроек в демо
+}
+
+function updateSetting(index, value) {
+    switch(index) {
+        case 0: state.settings.useWiFi = value; break;
+        case 1: state.settings.wifiRealTimeSearch = value; break;
+        case 2: state.settings.checkForUpdates = value; break;
+        case 3: state.settings.autoUpdate = value; break;
+        case 4: state.settings.debugMode = value; break;
+        case 5: state.settings.sleepingMode = value; break;
+    }
+    
+    saveState();
+    showNotification('Настройка сохранена', 1500);
+}
+
+function updateLibraryScreen() {
+    const libraryList = document.getElementById('library-list');
+    libraryList.innerHTML = '';
+    
+    // Получить сохранённые растения
+    const savedPlants = Object.entries(state.collection)
+        .filter(([id, count]) => count > 0)
+        .map(([id, count]) => ({
+            id: parseInt(id),
+            count: count,
+            name: data.resultText[id]?.title || `Растение #${id}`
+        }));
+    
+    if (savedPlants.length === 0) {
+        libraryList.innerHTML = `
+            <div class="library-item" style="justify-content: center;">
+                <span>Библиотека пуста</span>
+            </div>
+        `;
+        return;
+    }
+    
+    // Отобразить растения (максимум 6 на страницу)
+    const startIndex = state.pageID * 6;
+    const endIndex = Math.min(startIndex + 6, savedPlants.length);
+    
+    for (let i = startIndex; i < endIndex; i++) {
+        const plant = savedPlants[i];
+        const item = document.createElement('div');
+        item.className = 'library-item';
+        
+        item.innerHTML = `
+            <span class="plant-name">${plant.name}</span>
+            <span class="plant-count">${plant.count}</span>
+        `;
+        
+        item.addEventListener('click', () => {
+            state.questionNow = -plant.id;
+            showResult(plant.id);
+        });
+        
+        libraryList.appendChild(item);
+    }
+    
+    // Обновить кнопки навигации
+    const nextBtn = document.getElementById('library-next');
+    nextBtn.disabled = endIndex >= savedPlants.length;
+    state.canContinueScrolling = !nextBtn.disabled;
+}
+
+function updateSleepScreen() {
+    // Добавить обработчик пробуждения
+    const sleepScreen = document.getElementById('sleep-screen');
+    sleepScreen.addEventListener('click', wakeUp);
+}
+
+function wakeUp() {
+    state.sleepingMode = false;
+    state.lastUsedTime = Date.now();
+    showScreen('setup');
+}
+
+function updateWiFiIndicator() {
+    const indicator = document.getElementById('wifi-indicator');
+    const bars = indicator.querySelectorAll('.wifi-bar');
+    
+    // Случайное состояние WiFi для демонстрации
+    const signalStrength = Math.floor(Math.random() * 3);
+    
+    bars.forEach((bar, index) => {
+        if (index <= signalStrength) {
+            bar.style.opacity = '1';
+        } else {
+            bar.style.opacity = '0.3';
+        }
+    });
+}
+
+function showNotification(text, duration = 3000) {
+    const notification = document.getElementById('notification');
+    const textElement = document.getElementById('notification-text');
+    
+    textElement.textContent = text;
+    notification.style.display = 'block';
+    
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, duration);
+}
+
+function saveState() {
+    localStorage.setItem('plantIdentifierState', JSON.stringify({
+        screen: state.screen,
+        questionNow: state.questionNow,
+        previousQuestion: state.previousQuestion,
+        flowType: state.flowType,
+        familyID: state.familyID,
+        pageID: state.pageID,
+        settings: state.settings
+    }));
+}
+
+function updateUI() {
+    // Восстановить последний экран
+    if (state.screen && state.screen !== 'setup') {
+        showScreen(state.screen);
+    }
+    
+    // Обновить настройки переключателей
+    if (state.settings) {
+        Object.keys(state.settings).forEach((key, index) => {
+            const toggle = document.getElementById(`${key}-toggle`);
+            if (toggle) {
+                toggle.checked = state.settings[key];
+            }
+        });
+    }
+}
+
+// Автоматическое обновление индикатора WiFi
+setInterval(updateWiFiIndicator, 10000);
