@@ -227,9 +227,30 @@
             
             floatingElements.appendChild(element);
         }
+
+        music.volume = 0;
+        const fadeDuration = 3000;
+        function fadeIn() {
+            const startTime = Date.now();
+            const startVolume = music.volume;
+            
+            function updateVolume() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / fadeDuration, 1);
+                
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                music.volume = startVolume + (0.3 - startVolume) * easedProgress;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateVolume);
+                }
+            }
+            
+            updateVolume();
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const music = document.getElementById('background-music');
-            music.volume = 0.3;
+            fadeIn();
             music.currentTime = 40;
             const playMusic = () => {
                 music.play().catch(error => {
