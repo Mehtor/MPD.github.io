@@ -1,0 +1,302 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import SetupScreen from '@/components/screens/SetupScreen';
+import ProcessScreen from '@/components/screens/ProcessScreen';
+import ResultScreen from '@/components/screens/ResultScreen';
+import SettingsScreen from '@/components/screens/SettingsScreen';
+import LibraryScreen from '@/components/screens/LibraryScreen';
+import NotificationBlock from '@/components/ui/NotificationBlock';
+
+export default function Home() {
+  const [screenID, setScreenID] = useState(0);
+  const [notification, setNotification] = useState(null);
+  const [questionNow, setQuestionNow] = useState(1);
+  const [flowType, setFlowType] = useState(0);
+  const [previousQuestion, setPreviousQuestion] = useState(0);
+  const [previousQuestionAtMainFlow, setPreviousQuestionAtMainFlow] = useState(0);
+  const [familyID, setFamilyID] = useState(1);
+  const [resultId, setResultId] = useState(null);
+  const [collection, setCollection] = useState(() => {
+    const saved = localStorage.getItem('plantCollection');
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [wifiConnected, setWifiConnected] = useState(true);
+  const [wifiStrength, setWifiStrength] = useState(3);
+  const [story, setStory] = useState('');
+  const [csvStory, setCsvStory] = useState('');
+  const [lastUsedTime, setLastUsedTime] = useState(Date.now());
+  const [sleepingMode, setSleepingMode] = useState(false);
+
+  // Save collection to localStorage
+  useEffect(() => {
+    localStorage.setItem('plantCollection', JSON.stringify(collection));
+  }, [collection]);
+
+  // Auto-sleep and activity tracking
+  useEffect(() => {
+    const handleActivity = () => {
+      setLastUsedTime(Date.now());
+      if (sleepingMode) {
+        setSleepingMode(false);
+      }
+    };
+
+    window.addEventListener('click', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('touchstart', handleActivity);
+
+    const interval = setInterval(() => {
+      const inactive = Date.now() - lastUsedTime;
+      // Auto-sleep after 3 minutes of inactivity
+      if (!sleepingMode && inactive >= 180000) {
+        setSleepingMode(true);
+        setScreenID(5); // Sleeping screen
+      }
+      // Auto-shutdown after 10 minutes of inactivity
+      if (sleepingMode && inactive >= 600000) {
+        handleShowNotification('Автовыключение...', 0);
+      }
+    }, 10000);
+
+    return () => {
+      window.removeEventListener('click', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('touchstart', handleActivity);
+      clearInterval(interval);
+    };
+  }, [lastUsedTime, sleepingMode]);
+
+  // Save story and CSV to localStorage
+  useEffect(() => {
+    localStorage.setItem('questionStory', story);
+    localStorage.setItem('csvStory', csvStory);
+  }, [story, csvStory]);
+
+  const handleShowNotification = (text, linkedScreen) => {
+    setNotification({ text, linkedScreen });
+  };
+
+  const handleDismissNotification = () => {
+    if (notification?.linkedScreen !== undefined) {
+      setScreenID(notification.linkedScreen);
+    }
+    setNotification(null);
+  };
+
+  const handleStartWork = () => {
+    setQuestionNow(1);
+    setFlowType(0);
+    setPreviousQuestion(0);
+    setPreviousQuestionAtMainFlow(0);
+    setStory('История:\n');
+    setCsvStory('');
+    setScreenID(1);
+  };
+
+  const handleAnswer = (answer, nextQuestion) => {
+    // Build story
+    let newStory = story;
+    newStory += `${previousQuestion} ${answer ? '->' : '<-'} ${questionNow}\n`;
+    setStory(newStory);
+
+    // Build CSV story
+    const csvValue = flowType === 0 ? nextQuestion : nextQuestion + 1000;
+    setCsvStory(prev => prev + csvValue + ';');
+
+    setPreviousQuestion(questionNow);
+    
+    if (nextQuestion < 0) {
+      // Result reached
+      setResultId(nextQuestion);
+      setScreenID(2);
+    } else if (nextQuestion >= 1000) {
+      // Switch to species flow
+      const newFamilyID = nextQuestion - 1049;
+      setFamilyID(newFamilyID);
+      setPreviousQuestionAtMainFlow(questionNow);
+      setFlowType(1);
+      setQuestionNow(1);
+    } else {
+      setQuestionNow(nextQuestion);
+    }
+  };
+
+  const handleBack = () => {
+    if (questionNow === 1) {
+      if (flowType === 0) {
+        setScreenID(0);
+      } else {
+        // Return to main flow
+        setFlowType(0);
+        setQuestionNow(previousQuestionAtMainFlow);
+      }
+    } else {
+      // Build story for back navigation
+      let newStory = story;
+      newStory += `${previousQuestion} <- ${questionNow}\n`;
+      setStory(newStory);
+      setQuestionNow(previousQuestion);
+    }
+  };
+
+  const handleSaveToCollection = (id) => {
+    setCollection(prev => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1
+    }));
+  };
+
+  const handleRemoveFromCollection = (id) => {
+    setCollection(prev => {
+      const newCollection = { ...prev };
+      if (newCollection[id] > 1) {
+        newCollection[id]--;
+      } else {
+        delete newCollection[id];
+      }
+      return newCollection;
+    });
+  };
+
+  const handleOpenFromLibrary = (id) => {
+    setResultId(id);
+    setQuestionNow(id);
+    setScreenID(2);
+  };
+
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div 
+        className="relative w-[240px] h-[320px] rounded-lg overflow-hidden shadow-2xl"
+        style={{ 
+          boxShadow: '0 0 30px rgba(109, 143, 65, 0.3), inset 0 0 20px rgba(0,0,0,0.3)',
+          border: '3px solid #333'
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {notification && (
+            <NotificationBlock 
+              key="notification"
+              text={notification.text} 
+              onDismiss={handleDismissNotification} 
+            />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence mode="wait">
+          {screenID === 0 && (
+            <motion.div
+              key="setup"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <SetupScreen 
+                onStartWork={handleStartWork}
+                onSettings={() => setScreenID(3)}
+                onLibrary={() => setScreenID(4)}
+                wifiConnected={wifiConnected}
+                wifiStrength={wifiStrength}
+              />
+            </motion.div>
+          )}
+
+          {screenID === 1 && (
+            <motion.div
+              key="process"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ProcessScreen
+                questionNow={questionNow}
+                flowType={flowType}
+                familyID={familyID}
+                previousQuestion={previousQuestion}
+                onAnswer={handleAnswer}
+                onBack={handleBack}
+              />
+            </motion.div>
+          )}
+
+          {screenID === 2 && (
+            <motion.div
+              key="result"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ResultScreen
+                resultId={resultId}
+                collection={collection}
+                onSave={handleSaveToCollection}
+                onRemove={handleRemoveFromCollection}
+                onBack={() => setScreenID(0)}
+              />
+            </motion.div>
+          )}
+
+          {screenID === 3 && (
+            <motion.div
+              key="settings"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <SettingsScreen onBack={() => setScreenID(0)} />
+            </motion.div>
+          )}
+
+          {screenID === 4 && (
+            <motion.div
+              key="library"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <LibraryScreen
+                collection={collection}
+                onBack={() => setScreenID(0)}
+                onSelect={handleOpenFromLibrary}
+              />
+            </motion.div>
+          )}
+
+          {screenID === 5 && (
+            <motion.div
+              key="sleeping"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => {
+                setSleepingMode(false);
+                setScreenID(0);
+              }}
+            >
+              <div 
+                className="w-full h-[320px] flex items-center justify-center cursor-pointer"
+                style={{ backgroundColor: 'rgb(20, 20, 20)' }}
+              >
+                <p 
+                  className="text-2xl"
+                  style={{ 
+                    color: 'rgb(100, 100, 100)',
+                    fontFamily: 'Georgia, serif'
+                  }}
+                >
+                  💤
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
