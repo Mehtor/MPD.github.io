@@ -251,12 +251,13 @@
                 
                 updateVolume();
             }
-            fadeIn();
             const playMusic = () => {
                 music.play().catch(error => {
                     console.log('Автозапуск заблокирован браузером:', error);
                 });
             };
+            
+            fadeIn();
             setTimeout(playMusic, 750);
         });
     </script>
