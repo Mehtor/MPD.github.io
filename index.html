@@ -87,12 +87,27 @@
             <div class="result-content">
                 <div class="result-page active" id="result-page-0">
                     <div class="result-text">
-                        Спорангии собраны в округлые кучки, расположенные по середине боковых жилок, покрытые вздутым покрывалом яйцевидной формы...
+                        Спорангии собраны в округлые кучки, расположенные по середине боковых жилок...
                     </div>
                 </div>
                 <div class="result-page" id="result-page-1" style="display: none;">
                     <div class="result-text">
-                        Продолжение описания растения...
+                        Листья дважды-перистораздельные, в очертании продолговатоланцетные...
+                    </div>
+                </div>
+                <div class="result-page" id="result-page-2" style="display: none;">
+                    <div class="result-text">
+                        Рост 10-30 см. Споры в июне-августе...
+                    </div>
+                </div>
+                <div class="result-page" id="result-page-3" style="display: none;">
+                    <div class="result-text">
+                        Имеет очень широкое распространение...
+                    </div>
+                </div>
+                <div class="result-page" id="result-page-4" style="display: none;">
+                    <div class="result-text">
+                        Молодые листья обладают запахом горького миндаля...
                     </div>
                 </div>
             </div>
@@ -105,7 +120,7 @@
                     <i class="fas fa-save"></i>
                     <span>Сохранить</span>
                 </button>
-                <button class="control-btn" id="result-next" disabled>
+                <button class="control-btn" id="result-next">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
@@ -123,21 +138,7 @@
             </div>
             
             <div class="settings-list">
-                <div class="setting-item active" data-index="0">
-                    <span class="setting-name">Use WiFi</span>
-                    <div class="toggle-switch">
-                        <input type="checkbox" id="wifi-toggle" checked>
-                        <label for="wifi-toggle"></label>
-                    </div>
-                </div>
-                <div class="setting-item" data-index="1">
-                    <span class="setting-name">WiFi Real Time Search</span>
-                    <div class="toggle-switch">
-                        <input type="checkbox" id="wifi-search-toggle" checked>
-                        <label for="wifi-search-toggle"></label>
-                    </div>
-                </div>
-                <!-- Добавьте остальные настройки по аналогии -->
+                <!-- Настройки будут добавляться динамически -->
             </div>
             
             <div class="settings-controls">
@@ -145,7 +146,7 @@
                     <i class="fas fa-arrow-left"></i>
                     <span>Назад</span>
                 </button>
-                <button class="control-btn" id="settings-next" disabled>
+                <button class="control-btn" id="settings-next">
                     <span>Дальше</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
@@ -159,11 +160,7 @@
             </div>
             
             <div class="library-list" id="library-list">
-                <!-- Элементы библиотеки будут добавляться динамически -->
-                <div class="library-item">
-                    <span class="plant-name">Пузырник ломкий</span>
-                    <span class="plant-count">3</span>
-                </div>
+                <!-- Библиотека будет заполняться динамически -->
             </div>
             
             <div class="library-controls">
@@ -171,7 +168,7 @@
                     <i class="fas fa-arrow-left"></i>
                     <span>Назад</span>
                 </button>
-                <button class="control-btn" id="library-next" disabled>
+                <button class="control-btn" id="library-next">
                     <span>Дальше</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
