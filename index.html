@@ -264,7 +264,7 @@
             element.classList.add('floating-element');
             
             // Случайный размер
-            const size = Math.random() * 60 + 20;
+            const size = Math.random() * 12 + 20;
             element.style.width = `${size}px`;
             element.style.height = `${size}px`;
             
@@ -278,61 +278,8 @@
             
             floatingElements.appendChild(element);
         }
-        
-        // Обратный отсчет до указанной даты (например, до 1 декабря 2023)
-        const countDownDate = new Date("Dec 1, 2023 00:00:00").getTime();
-        
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-            
-            // Если дата прошла
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById("days").innerHTML = "00";
-                document.getElementById("hours").innerHTML = "00";
-                document.getElementById("minutes").innerHTML = "00";
-                document.getElementById("seconds").innerHTML = "00";
-                return;
-            }
-            
-            // Расчет дней, часов, минут и секунд
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            // Обновление значений
-            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
-        }
-        
-        // Обновляем отсчет каждую секунду
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        
         // Инициализация при загрузке
         updateCountdown();
-        
-        // Обработка формы уведомления
-        document.querySelector('.notify-btn').addEventListener('click', function() {
-            const emailInput = document.querySelector('.email-input');
-            const email = emailInput.value;
-            
-            if (email && validateEmail(email)) {
-                alert(`Спасибо! Мы уведомим вас по адресу ${email} о запуске сайта.`);
-                emailInput.value = '';
-            } else {
-                alert('Пожалуйста, введите корректный email адрес.');
-            }
-        });
-        
-        // Валидация email
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
     </script>
 </body>
 </html>
