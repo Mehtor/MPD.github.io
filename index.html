@@ -255,9 +255,9 @@
                 music.play().catch(error => {
                     console.log('Автозапуск заблокирован браузером:', error);
                 });
+                fadeIn();
             };
             
-            fadeIn();
             setTimeout(playMusic, 750);
         });
     </script>
