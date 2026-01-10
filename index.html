@@ -1,31 +1,198 @@
-import React from 'react';
-
-const UserNotRegisteredError = () => {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-slate-50">
-      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-lg border border-slate-100">
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-orange-100">
-            <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Access Restricted</h1>
-          <p className="text-slate-600 mb-8">
-            You are not registered to use this application. Please contact the app administrator to request access.
-          </p>
-          <div className="p-4 bg-slate-50 rounded-md text-sm text-slate-600">
-            <p>If you believe this is an error, you can:</p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Verify you are logged in with the correct account</li>
-              <li>Contact the app administrator for access</li>
-              <li>Try logging out and back in again</li>
-            </ul>
-          </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Определитель растений</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Уведомление -->
+        <div class="notification" id="notification">
+            <div class="notification-content">
+                <i class="fas fa-bell"></i>
+                <span id="notification-text">Обновление готово</span>
+            </div>
         </div>
-      </div>
-    </div>
-  );
-};
 
-export default UserNotRegisteredError;
+        <!-- Главный экран -->
+        <div class="screen" id="setup-screen">
+            <div class="header">
+                <h1>Определитель растений</h1>
+            </div>
+            
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            
+            <div class="buttons-grid">
+                <button class="menu-btn" id="start-work">
+                    <i class="fas fa-play"></i>
+                    <span>НАЧАТЬ РАБОТУ</span>
+                </button>
+                <button class="menu-btn" id="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>НАСТРОЙКИ</span>
+                </button>
+                <button class="menu-btn" id="library">
+                    <i class="fas fa-book"></i>
+                    <span>БИБЛИОТЕКА</span>
+                </button>
+            </div>
+            
+            <div class="wifi-indicator" id="wifi-indicator">
+                <div class="wifi-bar strong"></div>
+                <div class="wifi-bar medium"></div>
+                <div class="wifi-bar weak"></div>
+            </div>
+        </div>
+
+        <!-- Экран определения -->
+        <div class="screen" id="process-screen" style="display: none;">
+            <div class="process-header">
+                <div class="question-number" id="question-number">1</div>
+                <div class="flow-indicator">
+                    <span id="flow-type">Основной поток</span>
+                </div>
+            </div>
+            
+            <div class="question-section true-section">
+                <div class="section-label">ДА</div>
+                <div class="question-text" id="question-true">
+                    Листья, спороносные и бесплодные, все одинаковые
+                </div>
+            </div>
+            
+            <div class="question-section false-section">
+                <div class="section-label">НЕТ</div>
+                <div class="question-text" id="question-false">
+                    Спороносные листья резко отличаются от бесплодных
+                </div>
+            </div>
+            
+            <button class="back-btn" id="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Назад</span>
+            </button>
+        </div>
+
+        <!-- Экран результата -->
+        <div class="screen" id="result-screen" style="display: none;">
+            <div class="result-header">
+                <h2 id="result-title">Пузырник ломкий</h2>
+            </div>
+            
+            <div class="result-content">
+                <div class="result-page active" id="result-page-0">
+                    <div class="result-text">
+                        Спорангии собраны в округлые кучки, расположенные по середине боковых жилок, покрытые вздутым покрывалом яйцевидной формы...
+                    </div>
+                </div>
+                <div class="result-page" id="result-page-1" style="display: none;">
+                    <div class="result-text">
+                        Продолжение описания растения...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-controls">
+                <button class="control-btn" id="result-prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="control-btn" id="result-save">
+                    <i class="fas fa-save"></i>
+                    <span>Сохранить</span>
+                </button>
+                <button class="control-btn" id="result-next" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="collection-indicator" id="collection-indicator" style="display: none;">
+                <i class="fas fa-trash"></i>
+                <span id="collection-count">1</span>
+            </div>
+        </div>
+
+        <!-- Экран настроек -->
+        <div class="screen" id="settings-screen" style="display: none;">
+            <div class="settings-header">
+                <h2>Настройки</h2>
+            </div>
+            
+            <div class="settings-list">
+                <div class="setting-item active" data-index="0">
+                    <span class="setting-name">Use WiFi</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="wifi-toggle" checked>
+                        <label for="wifi-toggle"></label>
+                    </div>
+                </div>
+                <div class="setting-item" data-index="1">
+                    <span class="setting-name">WiFi Real Time Search</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="wifi-search-toggle" checked>
+                        <label for="wifi-search-toggle"></label>
+                    </div>
+                </div>
+                <!-- Добавьте остальные настройки по аналогии -->
+            </div>
+            
+            <div class="settings-controls">
+                <button class="control-btn" id="settings-back">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Назад</span>
+                </button>
+                <button class="control-btn" id="settings-next" disabled>
+                    <span>Дальше</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран библиотеки -->
+        <div class="screen" id="library-screen" style="display: none;">
+            <div class="library-header">
+                <h2>Библиотека</h2>
+            </div>
+            
+            <div class="library-list" id="library-list">
+                <!-- Элементы библиотеки будут добавляться динамически -->
+                <div class="library-item">
+                    <span class="plant-name">Пузырник ломкий</span>
+                    <span class="plant-count">3</span>
+                </div>
+            </div>
+            
+            <div class="library-controls">
+                <button class="control-btn" id="library-back">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Назад</span>
+                </button>
+                <button class="control-btn" id="library-next" disabled>
+                    <span>Дальше</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран сна -->
+        <div class="screen" id="sleep-screen" style="display: none;">
+            <div class="sleep-content">
+                <i class="fas fa-moon"></i>
+                <h2>zzz...</h2>
+                <p>Коснитесь экрана для пробуждения</p>
+            </div>
+        </div>
+
+        <!-- Кнопка питания -->
+        <div class="power-btn" id="power-btn">
+            <i class="fas fa-power-off"></i>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
