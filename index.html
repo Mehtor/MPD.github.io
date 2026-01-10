@@ -208,7 +208,7 @@
     </div>
     <audio id="background-music" loop>
         <source src="https://s3.deliciouspeaches.com/get/music/20230619/ANGELPLAYA_-_DANGEROUS_76163563.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает аудио элементы.
+        ---
     </audio>
     <script>
         // Добавляем плавающие элементы фона
@@ -234,42 +234,13 @@
         }
         document.addEventListener('DOMContentLoaded', function() {
             const music = document.getElementById('background-music');
-            
-            // Настройки громкости (от 0.0 до 1.0)
-            music.volume = 0.3; // 30% громкости
-            
-            // Пытаемся автоматически запустить музыку
+            music.volume = 0.3;
             const playMusic = () => {
                 music.play().catch(error => {
                     console.log('Автозапуск заблокирован браузером:', error);
-                    
-                    // Если автозапуск заблокирован, показываем кнопку для включения
-                    const playBtn = document.createElement('button');
-                    playBtn.innerHTML = '🔊 Включить фоновую музыку';
-                    playBtn.style.cssText = `
-                        position: fixed;
-                        bottom: 20px;
-                        right: 20px;
-                        padding: 12px 20px;
-                        background: linear-gradient(90deg, #ffcc00, #ff9900);
-                        color: #333;
-                        border: none;
-                        border-radius: 25px;
-                        cursor: pointer;
-                        font-weight: bold;
-                        z-index: 1000;
-                        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-                    `;
-                    playBtn.onclick = function() {
-                        music.play();
-                        this.style.display = 'none';
-                    };
-                    document.body.appendChild(playBtn);
                 });
             };
-            
-            // Запускаем музыку после небольшой задержки
-            setTimeout(playMusic, 1000);
+            setTimeout(playMusic, 100);
         });
     </script>
 </body>
