@@ -183,7 +183,6 @@
 </head>
 <body>
     <div class="floating-elements">
-        <!-- Анимированные элементы фона -->
     </div>
     
     <div class="container">
@@ -211,7 +210,6 @@
         ---
     </audio>
     <script>
-        // Добавляем плавающие элементы фона
         const floatingElements = document.querySelector('.floating-elements');
         for (let i = 0; i < 20; i++) {
             const element = document.createElement('div');
@@ -238,7 +236,7 @@
                     console.log('Автозапуск заблокирован браузером:', error);
                 });
             };
-            setTimeout(playMusic, 100);
+            setTimeout(playMusic, 750);
         });
     </script>
 </body>
