@@ -217,16 +217,13 @@
             const element = document.createElement('div');
             element.classList.add('floating-element');
             
-            // Случайный размер
             const size = Math.random() * 60 + 20;
             element.style.width = `${size}px`;
             element.style.height = `${size}px`;
             
-            // Случайная позиция
             element.style.left = `${Math.random() * 100}%`;
             element.style.top = `${Math.random() * 100}%`;
             
-            // Случайная задержка анимации
             element.style.animationDelay = `${Math.random() * 5}s`;
             element.style.animationDuration = `${Math.random() * 20 + 10}s`;
             
@@ -235,6 +232,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const music = document.getElementById('background-music');
             music.volume = 0.3;
+            music.currentTime = 40;
             const playMusic = () => {
                 music.play().catch(error => {
                     console.log('Автозапуск заблокирован браузером:', error);
