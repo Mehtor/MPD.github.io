@@ -1,7 +1,7 @@
 // Состояние приложения
 const state = {
     screen: 'setup',
-    flowType: 0, // 0 - основной поток, 1 - видовой
+    flowType: 0,
     questionNow: 1,
     previousQuestion: 0,
     familyID: 1,
@@ -22,7 +22,7 @@ const state = {
     lastUsedTime: Date.now()
 };
 
-// Данные определителя (упрощённая версия)
+// Данные определителя
 const data = {
     goto_if_true: {
         1: 2, 2: 8, 3: 4, 4: -9, 5: 1055, 6: 1059, 7: -10,
@@ -91,7 +91,12 @@ const data = {
         "Листья перисторассеченные с перистораздельными долями",
         "Спороносные листья резко отличаются от бесплодных",
         "Спорангии собраны в округлые кучки",
-        "Листья дважды-перистораздельные"
+        "Листья дважды-перистораздельные",
+        "Корневище толстое, короткое",
+        "Листья сидят пучком на корневище",
+        "Рост растения 10-30 см",
+        "Спорангии с вздутым покрывалом",
+        "Растение встречается в затененных местах"
     ],
     
     questions_false: [
@@ -99,31 +104,60 @@ const data = {
         "Листья цельные или слабораздельные",
         "Спороносные и бесплодные листья сходны",
         "Спорангии собраны в линейные сорусы",
-        "Листья простые или слабораздельные"
+        "Листья простые или слабораздельные",
+        "Корневище тонкое, ползучее",
+        "Листья расположены поодиночке",
+        "Рост растения более 50 см",
+        "Спорангии без покрывала",
+        "Растение встречается на открытых местах"
     ],
     
     resultText: {
         1: {
             title: "Пузырник ломкий",
             pages: [
-                "Спорангии собраны в округлые кучки, расположенные по середине боковых жилок, покрытые вздутым покрывалом яйцевидной формы, имеющим вид колпачка, пузыря. У зрелых кучек покрывало сморщивается, а затем исчезает. Листья дважды-перистораздельные, в очертании",
-                "продолговатоланцетные, с тонкими буроватыми черешками. Корневище толстое, короткое, листья сидят на нем пучком. Рост 10-30 см. Споры в июне-августе. По облесенным оврагам, затененным откосам, скалам, на известковой почве. Небольшой нежный папоротник, весьма ломкий.",
-                "Имеет очень широкое распространение: от Гренландии до Новой Зеландии. Научное название Cystopteris происходит от греческих слов kystis - «пузырь» и pteris - «папоротник», по форме покрывала. Молодые листья обладают запахом горького миндаля. Споры содержат синильную кислоту."
+                "Спорангии собраны в округлые кучки, расположенные по середине боковых жилок, покрытые вздутым покрывалом яйцевидной формы, имеющим вид колпачка, пузыря. У зрелых кучек покрывало сморщивается, а затем исчезает.",
+                "Листья дважды-перистораздельные, в очертании продолговатоланцетные, с тонкими буроватыми черешками. Корневище толстое, короткое, листья сидят на нем пучком.",
+                "Рост 10-30 см. Споры в июне-августе. По облесенным оврагам, затененным откосам, скалам, на известковой почве. Небольшой нежный папоротник, весьма ломкий.",
+                "Имеет очень широкое распространение: от Гренландии до Новой Зеландии. Научное название Cystopteris происходит от греческих слов kystis - «пузырь» и pteris - «папоротник».",
+                "Молодые листья обладают запахом горького миндаля. Споры содержат синильную кислоту. Растение используется в народной медицине с осторожностью."
             ]
         },
         2: {
             title: "Страусопер",
             pages: [
-                "Спорангии собраны в кучки, расположенные на особых спороносных листьях, по своей величине и форме резко отличающихся от бесплодных. Края сегментов пластинки спороносного листа свернуты до середины жилки...",
+                "Спорангии собраны в кучки, расположенные на особых спороносных листьях, по своей величине и форме резко отличающихся от бесплодных.",
+                "Края сегментов пластинки спороносного листа свернуты до середины жилки. Бесплодные листья значительно крупнее спороносных, дважды-перистые.",
                 "Толстое корневище с подземными ползучими побегами. Рост 60-100 см. Споры в июле и августе. По сырым лесам.",
-                "Может служить декоративным растением. Выдерживает пересадку в сады и парки. Растение ядовитое для скота."
+                "Название происходит от сходства плодущих листьев с пером страуса. Видовое название происходит от латинских слов filix - «папоротник».",
+                "Может служить декоративным растением. Выдерживает пересадку в сады и парки. Растение ядовитое для скота (кроме корневищ)."
+            ]
+        },
+        3: {
+            title: "Щитовник болотный",
+            pages: [
+                "Спорангии собраны в кучки, расположенные в 2 ряда между жилкой и завороченным краем листа.",
+                "Покрывало почковидной формы имеется в молодости, впоследствии отпадает. Листья с длинными ломкими черешками, дважды-перистые.",
+                "Корневище тонкое, ползучее, черноватого цвета. Рост 30-60 см. Споры в июле-августе.",
+                "По болотам, влажным кустарникам, лугам. Научное название Thelypteris происходит от греческого слова thelis - «женский».",
+                "Корневища вместе с корнями используются как составная часть при приготовлении субстрата для культуры оранжерейных растений."
+            ]
+        },
+        4: {
+            title: "Щитовник мужской",
+            pages: [
+                "Спорангии собраны в кучки округлой формы, расположенные в два ряда по бокам средней жилки, всегда с заметными покрывалами.",
+                "В нижней части черешка проходят 5-8 сосудистых пучков. Листья перисторассеченные с перистораздельными долями.",
+                "Листья на коротких черешках, густо покрытых буроватыми чешуйками. Рост 50-100 см. Споры в июне и июле.",
+                "По лиственным лесам. Научное название рода Dryopteris происходит от греческих слов drys - «дуб» и pteris - «папоротник».",
+                "Верхняя часть собранного осенью корневища употребляется в медицине как глистогонное средство. Корневище ядовито!"
             ]
         }
     }
 };
 
-// Инициализация
-document.addEventListener('DOMContentLoaded', () => {
+// Инициализация приложения
+document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
     setupEventListeners();
     simulateLoading();
@@ -133,13 +167,22 @@ function initializeApp() {
     // Загрузка состояния из localStorage
     const savedState = localStorage.getItem('plantIdentifierState');
     if (savedState) {
-        Object.assign(state, JSON.parse(savedState));
+        try {
+            const parsedState = JSON.parse(savedState);
+            Object.assign(state, parsedState);
+        } catch(e) {
+            console.error('Ошибка загрузки состояния:', e);
+        }
     }
     
     // Загрузка коллекции
     const savedCollection = localStorage.getItem('plantCollection');
     if (savedCollection) {
-        state.collection = JSON.parse(savedCollection);
+        try {
+            state.collection = JSON.parse(savedCollection);
+        } catch(e) {
+            console.error('Ошибка загрузки коллекции:', e);
+        }
     }
     
     updateUI();
@@ -147,14 +190,30 @@ function initializeApp() {
 
 function setupEventListeners() {
     // Главный экран
-    document.getElementById('start-work').addEventListener('click', () => showScreen('process'));
-    document.getElementById('settings').addEventListener('click', () => showScreen('settings'));
-    document.getElementById('library').addEventListener('click', () => showScreen('library'));
+    document.getElementById('start-work').addEventListener('click', function() {
+        showScreen('process');
+    });
+    
+    document.getElementById('settings').addEventListener('click', function() {
+        showScreen('settings');
+    });
+    
+    document.getElementById('library').addEventListener('click', function() {
+        showScreen('library');
+    });
     
     // Экран определения
-    document.querySelector('.true-section').addEventListener('click', () => answerQuestion(1));
-    document.querySelector('.false-section').addEventListener('click', () => answerQuestion(0));
-    document.getElementById('back-btn').addEventListener('click', () => answerQuestion(2));
+    document.querySelector('.true-section').addEventListener('click', function() {
+        answerQuestion(1);
+    });
+    
+    document.querySelector('.false-section').addEventListener('click', function() {
+        answerQuestion(0);
+    });
+    
+    document.getElementById('back-btn').addEventListener('click', function() {
+        answerQuestion(2);
+    });
     
     // Экран результата
     document.getElementById('result-prev').addEventListener('click', showPrevPage);
@@ -162,7 +221,7 @@ function setupEventListeners() {
     document.getElementById('result-save').addEventListener('click', toggleSavePlant);
     
     // Экран настроек
-    document.getElementById('settings-back').addEventListener('click', () => {
+    document.getElementById('settings-back').addEventListener('click', function() {
         if (state.pageID === 0) {
             showScreen('setup');
         } else {
@@ -171,8 +230,13 @@ function setupEventListeners() {
         }
     });
     
+    document.getElementById('settings-next').addEventListener('click', function() {
+        state.pageID++;
+        updateSettingsScreen();
+    });
+    
     // Экран библиотеки
-    document.getElementById('library-back').addEventListener('click', () => {
+    document.getElementById('library-back').addEventListener('click', function() {
         if (state.pageID === 0) {
             showScreen('setup');
         } else {
@@ -181,37 +245,52 @@ function setupEventListeners() {
         }
     });
     
+    document.getElementById('library-next').addEventListener('click', function() {
+        state.pageID++;
+        updateLibraryScreen();
+    });
+    
     // Кнопка питания
-    document.getElementById('power-btn').addEventListener('click', () => {
+    document.getElementById('power-btn').addEventListener('click', function() {
         if (state.sleepingMode) {
             wakeUp();
         } else {
-            showNotification('Удерживайте для выключения', 5000);
+            showNotification('Удерживайте для выключения', 3000);
+            // Имитация долгого нажатия
+            setTimeout(function() {
+                if (confirm('Выключить систему?')) {
+                    SystemShutdown();
+                }
+            }, 3000);
         }
     });
     
-    // Таймер сна
-    setInterval(() => {
+    // Автоматическое выключение при бездействии
+    setInterval(function() {
         if (state.settings.sleepingMode && !state.sleepingMode && 
             Date.now() - state.lastUsedTime > 180000) {
             showScreen('sleep');
             state.sleepingMode = true;
         }
     }, 60000);
+    
+    // Обновление индикатора WiFi
+    setInterval(updateWiFiIndicator, 30000);
 }
-// JavaScript продолжение (script.js, часть 2)
 
+// Функция показа экрана
 function showScreen(screenName) {
     state.screen = screenName;
     state.lastUsedTime = Date.now();
     
     // Скрыть все экраны
-    document.querySelectorAll('.screen').forEach(screen => {
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(function(screen) {
         screen.style.display = 'none';
     });
     
     // Показать выбранный экран
-    const screenElement = document.getElementById(`${screenName}-screen`);
+    const screenElement = document.getElementById(screenName + '-screen');
     if (screenElement) {
         screenElement.style.display = 'flex';
     }
@@ -246,15 +325,15 @@ function simulateLoading() {
     const progressBar = document.getElementById('loading-progress');
     let progress = 0;
     
-    const interval = setInterval(() => {
+    const interval = setInterval(function() {
         progress += 5;
-        progressBar.style.width = `${progress}%`;
+        progressBar.style.width = progress + '%';
         
         if (progress >= 100) {
             clearInterval(interval);
             // Показать уведомление об обновлении
-            setTimeout(() => {
-                showNotification('Обновление готово', 3000);
+            setTimeout(function() {
+                showNotification('Система готова', 2000);
             }, 500);
         }
     }, 100);
@@ -263,9 +342,6 @@ function simulateLoading() {
 function updateSetupScreen() {
     // Обновить индикатор WiFi
     updateWiFiIndicator();
-    
-    // Скрыть уведомление
-    document.getElementById('notification').style.display = 'none';
 }
 
 function updateProcessScreen() {
@@ -349,13 +425,15 @@ function changeFlow(toSpecies) {
     state.flowType = toSpecies ? 1 : 0;
     
     if (toSpecies) {
-        showNotification(`Переход к: ${state.familyID}`, 2000);
+        showNotification('Переход к видовому определителю', 1500);
         state.questionNow = 1;
+    } else {
+        showNotification('Возврат к основному потоку', 1500);
     }
     
-    setTimeout(() => {
+    setTimeout(function() {
         showScreen('process');
-    }, 2000);
+    }, 1500);
 }
 
 function showResult(resultId) {
@@ -365,8 +443,22 @@ function showResult(resultId) {
     // Обновить заголовок и текст результата
     const result = data.resultText[resultId] || data.resultText[1];
     document.getElementById('result-title').textContent = result.title;
-    document.getElementById('result-page-0').querySelector('.result-text').textContent = 
-        result.pages[0];
+    
+    // Очистить предыдущие страницы
+    for (let i = 0; i < 5; i++) {
+        const page = document.getElementById('result-page-' + i);
+        if (page) {
+            page.style.display = 'none';
+            page.querySelector('.result-text').textContent = 
+                result.pages[i] || 'Нет описания';
+        }
+    }
+    
+    // Показать первую страницу
+    const firstPage = document.getElementById('result-page-0');
+    if (firstPage) {
+        firstPage.style.display = 'block';
+    }
     
     // Обновить индикатор коллекции
     updateCollectionIndicator(resultId);
@@ -381,16 +473,16 @@ function updateResultScreen() {
     const resultId = Math.abs(state.questionNow);
     const result = data.resultText[resultId] || data.resultText[1];
     
-    // Показать текущую страницу
-    document.querySelectorAll('.result-page').forEach(page => {
-        page.style.display = 'none';
-    });
+    // Скрыть все страницы
+    for (let i = 0; i < 5; i++) {
+        const page = document.getElementById('result-page-' + i);
+        if (page) page.style.display = 'none';
+    }
     
-    const currentPage = document.getElementById(`result-page-${state.pageID}`);
+    // Показать текущую страницу
+    const currentPage = document.getElementById('result-page-' + state.pageID);
     if (currentPage) {
         currentPage.style.display = 'block';
-        currentPage.querySelector('.result-text').textContent = 
-            result.pages[state.pageID] || result.pages[0];
     }
     
     // Обновить кнопки навигации
@@ -472,19 +564,26 @@ function updateSettingsScreen() {
     const settingsList = document.querySelector('.settings-list');
     settingsList.innerHTML = '';
     
-    const settings = [
+    const settingsArray = [
         { id: 'wifi', name: 'Use WiFi', value: state.settings.useWiFi },
         { id: 'wifi-search', name: 'WiFi Real Time Search', value: state.settings.wifiRealTimeSearch },
         { id: 'updates', name: 'Check for Updates', value: state.settings.checkForUpdates },
         { id: 'auto-update', name: 'Auto Update', value: state.settings.autoUpdate },
         { id: 'debug', name: 'Debug Mode', value: state.settings.debugMode },
-        { id: 'sleep', name: 'Sleeping Mode', value: state.settings.sleepingMode }
+        { id: 'sleep', name: 'Sleeping Mode', value: state.settings.sleepingMode },
+        { id: 'auto-off', name: 'Auto Off', value: state.settings.autoOff },
+        { id: 'tft-reconnect', name: 'TFT Reconnect', value: state.settings.tftReconnect }
     ];
     
-    settings.forEach((setting, index) => {
+    // Показать только 6 настроек на страницу
+    const startIndex = state.pageID * 6;
+    const endIndex = Math.min(startIndex + 6, settingsArray.length);
+    
+    for (let i = startIndex; i < endIndex; i++) {
+        const setting = settingsArray[i];
         const item = document.createElement('div');
         item.className = 'setting-item';
-        item.setAttribute('data-index', index);
+        item.setAttribute('data-index', i);
         
         item.innerHTML = `
             <span class="setting-name">${setting.name}</span>
@@ -495,30 +594,27 @@ function updateSettingsScreen() {
         `;
         
         // Добавить обработчик клика
-        item.addEventListener('click', (e) => {
-            if (!e.target.matches('input')) {
-                const checkbox = item.querySelector('input');
-                checkbox.checked = !checkbox.checked;
-                updateSetting(index, checkbox.checked);
-            }
+        const toggle = item.querySelector('input');
+        toggle.addEventListener('change', function() {
+            updateSetting(i, this.checked);
         });
         
         settingsList.appendChild(item);
-    });
+    }
     
     // Обновить кнопки навигации
     const nextBtn = document.getElementById('settings-next');
-    nextBtn.disabled = true; // Только одна страница настроек в демо
+    nextBtn.disabled = endIndex >= settingsArray.length;
 }
 
 function updateSetting(index, value) {
-    switch(index) {
-        case 0: state.settings.useWiFi = value; break;
-        case 1: state.settings.wifiRealTimeSearch = value; break;
-        case 2: state.settings.checkForUpdates = value; break;
-        case 3: state.settings.autoUpdate = value; break;
-        case 4: state.settings.debugMode = value; break;
-        case 5: state.settings.sleepingMode = value; break;
+    const settingsArray = [
+        'useWiFi', 'wifiRealTimeSearch', 'checkForUpdates', 
+        'autoUpdate', 'debugMode', 'sleepingMode', 'autoOff', 'tftReconnect'
+    ];
+    
+    if (settingsArray[index]) {
+        state.settings[settingsArray[index]] = value;
     }
     
     saveState();
@@ -530,13 +626,17 @@ function updateLibraryScreen() {
     libraryList.innerHTML = '';
     
     // Получить сохранённые растения
-    const savedPlants = Object.entries(state.collection)
-        .filter(([id, count]) => count > 0)
-        .map(([id, count]) => ({
-            id: parseInt(id),
-            count: count,
-            name: data.resultText[id]?.title || `Растение #${id}`
-        }));
+    const savedPlants = [];
+    for (const [id, count] of Object.entries(state.collection)) {
+        if (count > 0) {
+            const plantId = parseInt(id);
+            savedPlants.push({
+                id: plantId,
+                count: count,
+                name: (data.resultText[plantId] || { title: `Растение #${plantId}` }).title
+            });
+        }
+    }
     
     if (savedPlants.length === 0) {
         libraryList.innerHTML = `
@@ -561,7 +661,7 @@ function updateLibraryScreen() {
             <span class="plant-count">${plant.count}</span>
         `;
         
-        item.addEventListener('click', () => {
+        item.addEventListener('click', function() {
             state.questionNow = -plant.id;
             showResult(plant.id);
         });
@@ -572,7 +672,6 @@ function updateLibraryScreen() {
     // Обновить кнопки навигации
     const nextBtn = document.getElementById('library-next');
     nextBtn.disabled = endIndex >= savedPlants.length;
-    state.canContinueScrolling = !nextBtn.disabled;
 }
 
 function updateSleepScreen() {
@@ -592,10 +691,10 @@ function updateWiFiIndicator() {
     const bars = indicator.querySelectorAll('.wifi-bar');
     
     // Случайное состояние WiFi для демонстрации
-    const signalStrength = Math.floor(Math.random() * 3);
+    const signalStrength = Math.floor(Math.random() * 4); // 0-3
     
-    bars.forEach((bar, index) => {
-        if (index <= signalStrength) {
+    bars.forEach(function(bar, index) {
+        if (index < signalStrength) {
             bar.style.opacity = '1';
         } else {
             bar.style.opacity = '0.3';
@@ -603,28 +702,32 @@ function updateWiFiIndicator() {
     });
 }
 
-function showNotification(text, duration = 3000) {
+function showNotification(text, duration) {
     const notification = document.getElementById('notification');
     const textElement = document.getElementById('notification-text');
     
     textElement.textContent = text;
     notification.style.display = 'block';
     
-    setTimeout(() => {
+    setTimeout(function() {
         notification.style.display = 'none';
-    }, duration);
+    }, duration || 3000);
 }
 
 function saveState() {
-    localStorage.setItem('plantIdentifierState', JSON.stringify({
-        screen: state.screen,
-        questionNow: state.questionNow,
-        previousQuestion: state.previousQuestion,
-        flowType: state.flowType,
-        familyID: state.familyID,
-        pageID: state.pageID,
-        settings: state.settings
-    }));
+    try {
+        localStorage.setItem('plantIdentifierState', JSON.stringify({
+            screen: state.screen,
+            questionNow: state.questionNow,
+            previousQuestion: state.previousQuestion,
+            flowType: state.flowType,
+            familyID: state.familyID,
+            pageID: state.pageID,
+            settings: state.settings
+        }));
+    } catch(e) {
+        console.error('Ошибка сохранения состояния:', e);
+    }
 }
 
 function updateUI() {
@@ -632,17 +735,15 @@ function updateUI() {
     if (state.screen && state.screen !== 'setup') {
         showScreen(state.screen);
     }
-    
-    // Обновить настройки переключателей
-    if (state.settings) {
-        Object.keys(state.settings).forEach((key, index) => {
-            const toggle = document.getElementById(`${key}-toggle`);
-            if (toggle) {
-                toggle.checked = state.settings[key];
-            }
-        });
-    }
 }
 
-// Автоматическое обновление индикатора WiFi
-setInterval(updateWiFiIndicator, 10000);
+function SystemShutdown() {
+    showNotification('Выключение системы...', 2000);
+    setTimeout(function() {
+        // Очистить состояние
+        localStorage.removeItem('plantIdentifierState');
+        localStorage.removeItem('plantCollection');
+        // Перезагрузить страницу
+        location.reload();
+    }, 2000);
+}
