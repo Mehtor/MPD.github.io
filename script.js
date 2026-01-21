@@ -130,8 +130,8 @@ function ProcessScreen() {
     let qFalse = "";
     
     if (flowType === 0) {
-        qTrue = fileSystem.readSpecificLine("questions_true.txt", questionNow);
-        qFalse = fileSystem.readSpecificLine("questions_false.txt", questionNow);
+        qTrue = await fileSystem.readSpecificLine("questions_true.txt", questionNow);
+        qFalse = await fileSystem.readSpecificLine("questions_false.txt", questionNow);
     } else {
         if (SpeciesDeterminant[familyID]) {
             qTrue = SpeciesDeterminant[familyID].Species_questions_true[questionNow - 1] || "";
@@ -183,7 +183,7 @@ function ResultScreen(mode) {
     const backTxtColor = (pageID == 0) ? 'rgb(149, 112, 130)' : 'rgb(224, 222, 151)';
     html += `<div class="btn" style="left:10px; top:283px; width:25px; height:25px; border-radius:5px; background-color:${backBtnColor}; color:${backTxtColor}; font-size:20px;" onclick="handleTouch(20)">&lt;</div>`;
 
-    let fullText = fileSystem.readSpecificLine("resultTextShort.txt", questionNow * -1);
+    let fullText = await fileSystem.readSpecificLine("resultTextShort.txt", questionNow * -1);
 
     canBeContinuedScroling = fullText.length > 100 * (pageID + 1); 
     
@@ -191,7 +191,7 @@ function ResultScreen(mode) {
         html += `<div class="btn" style="left:50px; top:283px; width:25px; height:25px; border-radius:5px; background-color:rgb(149, 112, 130); color:rgb(224, 222, 151); font-size:20px;" onclick="handleTouch(21)">&gt;</div>`;
     }
 
-    let headerText = fileSystem.readSpecificLine("resultTextHeader.txt", questionNow * -1);
+    let headerText = await fileSystem.readSpecificLine("resultTextHeader.txt", questionNow * -1);
     let parts = headerText.split(';');
     html += `<div style="position:absolute; top:15px; left:3px; font-family:'Cooper'; color:rgb(175, 163, 134);">
         <div>${parts[0] || ''}</div>
@@ -258,7 +258,7 @@ function LibraryScreen(fullRedraw) {
         if(collection[i] > 0) {
             listSelectHelper.push({
                 id: i,
-                header: fileSystem.readSpecificLine("resultTextHeader.txt", -i),
+                header: await fileSystem.readSpecificLine("resultTextHeader.txt", -i),
                 count: collection[i]
             });
         }
@@ -420,4 +420,5 @@ function handleTouch(actionID) {
 // Launch
 window.onload = function() {
     SetupScreen(227);
+
 };
