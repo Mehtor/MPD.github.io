@@ -25,7 +25,7 @@ async function loadFile(filename) {
         return fileCache[filename];
     }
 
-    const response = await fetch(`/${filename}`);
+    const response = await fetch(filename);
     if (!response.ok) {
         throw new Error(`Не удалось загрузить файл: ${filename}`);
     }
@@ -422,4 +422,5 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
