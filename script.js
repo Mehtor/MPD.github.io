@@ -141,7 +141,7 @@ async function ProcessScreen() {
 
     let html = `
         <div class="question-area-true" style="background-color:${topColor}" onclick="handleTouch(1)">
-            <div class="question-text" style="top:0px; left:7px;">${qTrue}</div>
+            <div class="question-text" style="top:0px; left:25px;">${qTrue}</div>
             <div style="position:absolute; top:7px; left:5px; font-family:'Times New Roman'; color:${flowType===0?'white':'rgb(224,222,151)'}">${questionNow}</div>
         </div>
         <div class="question-area-false" style="background-color:${botColor}" onclick="handleTouch(0)">
@@ -421,6 +421,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
