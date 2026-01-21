@@ -116,7 +116,7 @@ function drawWiFiIndicator() {
     return html;
 }
 
-function ProcessScreen() {
+async function ProcessScreen() {
     if (screenID === 0) {
         screenID = 1;
         questionNow = 1;
@@ -156,7 +156,7 @@ function ProcessScreen() {
     tftScreen.innerHTML = html;
 }
 
-function ResultScreen(mode) {
+async function ResultScreen(mode) {
     if (screenID != 2) {
         screenID = 2;
         pageID = 0;
@@ -239,7 +239,7 @@ function SettingsScreen(fullRedraw) {
     tftScreen.innerHTML = html;
 }
 
-function LibraryScreen(fullRedraw) {
+async function LibraryScreen(fullRedraw) {
     if (screenID != 4) {
         screenID = 4;
         pageID = 0;
@@ -422,3 +422,4 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
