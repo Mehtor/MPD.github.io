@@ -141,14 +141,13 @@ async function ProcessScreen() {
 
     let html = `
         <div class="question-area-true" style="background-color:${topColor}" onclick="handleTouch(1)">
-            <div class="question-text" style="top:15px; left:20px;">${qTrue}</div>
-            <div style="position:absolute; top:16px; left:5px; font-family:'Times New Roman'; color:${flowType===0?'white':'rgb(224,222,151)'}">${questionNow}</div>
+            <div class="question-text" style="top:0px; left:7px;">${qTrue}</div>
+            <div style="position:absolute; top:7px; left:5px; font-family:'Times New Roman'; color:${flowType===0?'white':'rgb(224,222,151)'}">${questionNow}</div>
         </div>
         <div class="question-area-false" style="background-color:${botColor}" onclick="handleTouch(0)">
-             <div class="question-text" style="top:25px; left:10px;">${qFalse}</div>
+             <div class="question-text" style="top:0px; left:7px;">${qFalse}</div>
         </div>
-        
-        <div class="process-back-btn" onclick="event.stopPropagation(); handleTouch(2)">
+        <div class="process-back-btn" style="background:transparent" onclick="event.stopPropagation(); handleTouch(2)">
             <span style="color:${(questionNow == 1 && flowType == 0) ? 'red' : 'rgb(224, 222, 151)'}">Назад</span>
         </div>
     `;
@@ -422,5 +421,6 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
