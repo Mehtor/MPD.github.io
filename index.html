@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Определитель Растений</title>
+    <title>Определитель растений</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -11,92 +11,68 @@
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <script src="https://unpkg.com/lucide@0.263.1"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-        body { background-color: #1a1a1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .device-frame {
-            width: 240px; height: 320px;
-            background-color: black;
-            position: relative;
-            overflow: hidden;
-            border: 4px solid #333;
-            border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        body { background-color: #000; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .screen-container { width: 240px; height: 320px; border: 3px solid #333; border-radius: 8px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(109, 143, 65, 0.3); }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect } = React;
         const { motion, AnimatePresence } = FramerMotion;
-        const { Trash2, ChevronLeft, ChevronRight, Wifi, WifiOff } = lucide;
 
-        // --- DATA ---
+        // --- ДАННЫЕ (из ResultScreen.txt и ProcessScreen.txt) ---
         const resultData = {
-            '-1': { header: ['Берёза', 'Betula'], pages: ['Берёза - род листопадных деревьев и кустарников семейства Берёзовые.', 'Кора обычно белая, гладкая. Листья очерёдные, простые.'] },
-            '-2': { header: ['Дуб', 'Quercus'], pages: ['Дуб - род деревьев семейства Буковые. Характеризуется желудями.', 'Древесина дуба очень прочная. Используется в строительстве.'] },
-            '-3': { header: ['Клён', 'Acer'], pages: ['Клён - род растений семейства Сапиндовые. Известен яркой листвой.', 'Листья обычно пальчато-лопастные. Плоды - двукрылатки.'] },
-            '-4': { header: ['Липа', 'Tilia'], pages: ['Липа - ценный медонос. Листья сердцевидные.', 'Цветки душистые, используются в народной медицине.'] },
+            '-1': { header: ['Берёза', 'Betula'], pages: ['Берёза - род листопадных деревьев. Кора обычно белая, гладкая.', 'Листья очерёдные, простые. Цветки в серёжках.'] },
+            '-2': { header: ['Дуб', 'Quercus'], pages: ['Дуб - дерево семейства Буковые. Характеризуется желудями.', 'Древесина очень прочная, используется в строительстве.'] },
+            '-3': { header: ['Клён', 'Acer'], pages: ['Клён известен красивой осенней окраской.', 'Листья пальчато-лопастные. Плоды - двукрылатки.'] },
+            '-4': { header: ['Липа', 'Tilia'], pages: ['Липа - ценный медонос.', 'Листья сердцевидные. Цветки душистые.'] },
             '-5': { header: ['Рябина', 'Sorbus'], pages: ['Декоративное дерево с красными плодами.', 'Листья непарноперистые. Плоды - яблочки.'] },
             '-6': { header: ['Ива', 'Salix'], pages: ['Растёт у водоёмов. Ветви гибкие.', 'Листья ланцетные. Цветки в серёжках.'] }
         };
 
-        const questionsTrue = { 1: "Листья простые, цельные или с зубчатым краем", 2: "Листья расположены супротивно", 3: "Цветки с 5 лепестками", 4: "Плод - ягода или костянка", 5: "Растение травянистое" };
-        const questionsFalse = { 1: "Листья сложные, перистые или пальчатые", 2: "Листья расположены очерёдно", 3: "Цветки с 4 или 6 лепестками", 4: "Плод - коробочка или стручок", 5: "Растение древесное или кустарник" };
+        const questionsTrue = { 1: "Листья простые", 2: "Супротивное расположение", 3: "5 лепестков", 4: "Плод - ягода", 5: "Травянистое" };
+        const questionsFalse = { 1: "Листья сложные", 2: "Очерёдное расположение", 3: "4 или 6 лепестков", 4: "Плод - коробочка", 5: "Древесное" };
         const questionFlow = { 1: { true: 2, false: 3 }, 2: { true: 4, false: 5 }, 3: { true: -1, false: -2 }, 4: { true: -3, false: -4 }, 5: { true: -5, false: -6 } };
 
-        const settingsInitial = [
-            { name: 'Использовать WiFi', enabled: true }, { name: 'Автопоиск сетей', enabled: true },
-            { name: 'Режим отладки', enabled: false }, { name: 'Звуковые сигналы', enabled: true },
-            { name: 'Автоотключение', enabled: true }, { name: 'Яркость экрана', enabled: true },
-            { name: 'Таймаут экрана', enabled: true }, { name: 'Язык интерфейса', enabled: true },
-            { name: 'Сброс настроек', enabled: false }, { name: 'О программе', enabled: true }
-        ];
+        // --- КОМПОНЕНТЫ ---
 
-        // --- UI COMPONENTS ---
-
-        const NotificationBlock = ({ text, onDismiss }) => (
-            <motion.div initial={{ y: -50 }} animate={{ y: 0 }} exit={{ y: -50 }} className="absolute top-0 left-0 right-0 z-50 cursor-pointer" onClick={onDismiss}>
-                <div className="h-[45px] rounded-b-[20px] flex items-center px-4" style={{ backgroundColor: 'rgb(132, 77, 104)' }}>
-                    <span className="text-white text-sm font-medium" style={{ fontFamily: 'Georgia, serif' }}>{text}</span>
-                </div>
+        const Notification = ({ text, onDismiss }) => (
+            <motion.div initial={{ y: -50 }} animate={{ y: 0 }} exit={{ y: -50 }} 
+                className="absolute top-0 left-0 right-0 z-50 p-2 text-white text-xs text-center cursor-pointer"
+                style={{ backgroundColor: 'rgb(132, 77, 104)', borderRadius: '0 0 20px 20px' }} onClick={onDismiss}>
+                {text}
             </motion.div>
         );
 
-        // --- SCREENS ---
-
         const SetupScreen = ({ onStart, onSettings, onLibrary, showLoading }) => {
             const [progress, setProgress] = useState(showLoading ? 0 : 227);
-            const [loaded, setLoaded] = useState(!showLoading);
+            const [ready, setReady] = useState(!showLoading);
 
             useEffect(() => {
                 if (!showLoading) return;
-                const interval = setInterval(() => {
-                    setProgress(p => { if (p >= 227) { setLoaded(true); clearInterval(interval); return 227; } return p + 15; });
+                const timer = setInterval(() => {
+                    setProgress(p => { if (p >= 227) { setReady(true); clearInterval(timer); return 227; } return p + 15; });
                 }, 50);
-                return () => clearInterval(interval);
-            }, [showLoading]);
+                return () => clearInterval(timer);
+            }, []);
 
             return (
-                <div className="w-full h-full p-4 relative" style={{ backgroundColor: 'rgb(54, 78, 49)' }}>
-                    <div className="absolute top-1 right-1 flex gap-[2px]">
-                        {[1,2,3].map(i => <div key={i} className="w-[3px] h-[5px] rounded-[1px]" style={{ backgroundColor: 'rgb(224, 222, 151)' }} />)}
+                <div className="w-full h-full p-4 flex flex-col items-center" style={{ backgroundColor: 'rgb(54, 78, 49)' }}>
+                    <div className="w-full h-20 rounded-lg flex flex-col items-center justify-center mt-4" style={{ backgroundColor: 'rgb(109, 143, 65)' }}>
+                        <span className="text-white font-serif">Определитель</span>
+                        <span className="text-white font-serif">растений</span>
                     </div>
-                    <div className="mt-8 w-[205px] h-[78px] mx-auto rounded-[14px] flex flex-col items-center justify-center shadow-lg" style={{ backgroundColor: 'rgb(109, 143, 65)' }}>
-                        <h1 className="text-white text-lg leading-tight" style={{ fontFamily: 'Georgia, serif' }}>Определитель</h1>
-                        <h1 className="text-white text-lg leading-tight" style={{ fontFamily: 'Georgia, serif' }}>растений</h1>
-                    </div>
-                    {loaded ? (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-3 mt-10 items-center">
-                            <button onClick={onStart} className="w-[200px] h-[45px] rounded-[10px] uppercase text-sm font-medium active:scale-95 transition-transform" style={{ backgroundColor: 'rgb(149, 112, 130)', color: 'rgb(224, 222, 151)', fontFamily: 'Trebuchet MS' }}>Начать</button>
-                            <button onClick={onSettings} className="w-[200px] h-[45px] rounded-[10px] uppercase text-sm font-medium active:scale-95 transition-transform" style={{ backgroundColor: 'rgb(149, 112, 130)', color: 'rgb(224, 222, 151)', fontFamily: 'Trebuchet MS' }}>Настройки</button>
-                            <button onClick={onLibrary} className="w-[200px] h-[45px] rounded-[10px] uppercase text-sm font-medium active:scale-95 transition-transform" style={{ backgroundColor: 'rgb(149, 112, 130)', color: 'rgb(224, 222, 151)', fontFamily: 'Trebuchet MS' }}>Библиотека</button>
-                        </motion.div>
+                    {ready ? (
+                        <div className="flex flex-col gap-2 mt-8">
+                            <button onClick={onStart} className="w-40 h-10 rounded bg-[#957082] text-[#E0DE97] text-xs uppercase">Начать</button>
+                            <button onClick={onSettings} className="w-40 h-10 rounded bg-[#957082] text-[#E0DE97] text-xs uppercase">Настройки</button>
+                            <button onClick={onLibrary} className="w-40 h-10 rounded bg-[#957082] text-[#E0DE97] text-xs uppercase">Библиотека</button>
+                        </div>
                     ) : (
-                        <div className="absolute bottom-4 left-[6px] w-[227px] h-[19px] rounded-full overflow-hidden bg-[#eef6d2]">
-                            <div style={{ width: `${progress}px`, height: '100%', background: 'rgb(109, 143, 65)' }} />
+                        <div className="absolute bottom-4 left-2 w-[220px] h-4 bg-[#EEF6D2] rounded-full overflow-hidden">
+                            <div style={{ width: `${progress}px`, height: '100%', background: '#6D8F41' }} />
                         </div>
                     )}
                 </div>
@@ -105,141 +81,71 @@
 
         const ProcessScreen = ({ qId, onAnswer, onBack }) => (
             <div className="w-full h-full relative">
-                <motion.div onClick={() => onAnswer(true)} className="h-1/2 flex items-center p-4 cursor-pointer" style={{ backgroundColor: 'rgb(57, 97, 83)' }}>
-                    <p className="text-xs text-white" style={{ fontFamily: 'Courier New' }}>{questionsTrue[qId]}</p>
-                </motion.div>
-                <motion.div onClick={() => onAnswer(false)} className="h-1/2 flex items-center p-4 cursor-pointer pt-10" style={{ backgroundColor: 'rgb(109, 143, 65)' }}>
-                    <p className="text-xs text-white" style={{ fontFamily: 'Courier New' }}>{questionsFalse[qId]}</p>
-                </motion.div>
-                <div className="absolute top-1/2 left-0 right-0 flex justify-center -translate-y-1/2 z-10">
-                    <button onClick={onBack} className="px-4 py-1 text-sm font-medium" style={{ color: 'rgb(224, 222, 151)', fontFamily: 'Trebuchet MS' }}>Назад</button>
+                <div className="h-1/2 bg-[#396153] p-4 cursor-pointer flex items-center" onClick={() => onAnswer(true)}>
+                    <p className="text-white text-xs font-mono">{questionsTrue[qId]}</p>
                 </div>
+                <div className="h-1/2 bg-[#6D8F41] p-4 cursor-pointer flex items-center pt-8" onClick={() => onAnswer(false)}>
+                    <p className="text-white text-xs font-mono">{questionsFalse[qId]}</p>
+                </div>
+                <button onClick={onBack} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#E0DE97] text-sm">Назад</button>
             </div>
         );
 
-        const ResultScreen = ({ id, onSave, onBack, collection, onRemove }) => {
-            const [page, setPage] = useState(0);
-            const data = resultData[id];
-            const savedCount = collection[id] || 0;
-
+        const ResultScreen = ({ id, onSave, onBack, collection }) => {
+            const data = resultData[id] || { header: ['?', '?'], pages: ['Нет данных'] };
             return (
-                <div className="w-full h-full p-4 relative" style={{ backgroundColor: 'rgb(72, 24, 46)' }}>
-                    <div className="mb-2">
-                        <h2 className="text-lg font-bold" style={{ color: 'rgb(175, 163, 134)', fontFamily: 'Georgia' }}>{data.header[0]}</h2>
-                        <p className="text-xs italic" style={{ color: 'rgb(175, 163, 134)' }}>{data.header[1]}</p>
-                    </div>
-                    <p className="text-xs leading-relaxed" style={{ color: 'rgb(175, 163, 134)', fontFamily: 'Courier New' }}>{data.pages[page]}</p>
-                    <div className="absolute bottom-2 left-0 right-0 px-2 flex gap-1 items-center">
-                        <button onClick={onBack} className="w-[35px] h-[27px] rounded-[10px] flex items-center justify-center bg-[#e0de97]" ><ChevronLeft size={16} color="#844d68" /></button>
-                        {data.pages.length > 1 && (
-                            <button onClick={() => setPage(p => (p + 1) % data.pages.length)} className="w-[35px] h-[27px] rounded-[10px] flex items-center justify-center bg-[#957082]"><ChevronRight size={16} color="#e0de97" /></button>
-                        )}
-                        {savedCount > 0 && (
-                            <button onClick={() => onRemove(id)} className="w-[35px] h-[27px] rounded-[10px] flex items-center justify-center bg-[#957082] ml-auto"><Trash2 size={14} color="#e0de97" /></button>
-                        )}
-                        <button onClick={() => onSave(id)} className="h-[27px] px-3 rounded-[11px] text-[10px] uppercase font-bold ml-auto" style={{ backgroundColor: savedCount > 0 ? '#e0de97' : '#957082', color: savedCount > 0 ? '#844d68' : '#e0de97' }}>{savedCount > 0 ? `В базе: ${savedCount}` : 'Сохранить'}</button>
+                <div className="w-full h-full p-4 text-[#AFA386]" style={{ backgroundColor: 'rgb(72, 24, 46)' }}>
+                    <h2 className="text-sm font-bold">{data.header[0]}</h2>
+                    <p className="text-[10px] italic mb-2">{data.header[1]}</p>
+                    <p className="text-xs font-mono">{data.pages[0]}</p>
+                    <div className="absolute bottom-2 left-0 right-0 px-4 flex justify-between">
+                        <button onClick={onBack} className="p-2 bg-[#E0DE97] text-[#957082] rounded">←</button>
+                        <button onClick={() => onSave(id)} className={`px-4 rounded ${collection[id] ? 'bg-[#E0DE97] text-[#957082]' : 'bg-[#957082] text-[#E0DE97]'}`}>
+                            {collection[id] ? 'Сохранено' : 'Сохранить'}
+                        </button>
                     </div>
                 </div>
             );
         };
 
-        const SettingsScreen = ({ onBack }) => {
-            const [page, setPage] = useState(0);
-            const items = settingsInitial.slice(page * 6, (page + 1) * 6);
-            return (
-                <div className="w-full h-full p-2 relative" style={{ backgroundColor: 'rgb(54, 78, 49)' }}>
-                    <div className="flex flex-col gap-1 mt-4">
-                        {items.map((item, i) => (
-                            <div key={i} className="h-[35px] px-3 flex items-center justify-between rounded-[8px] bg-[#6d8f41] text-[#e0de97] text-xs font-medium">
-                                <span>{page * 6 + i + 1}. {item.name}</span>
-                                <div className={`w-3 h-3 rounded-full ${item.enabled ? 'bg-[#e0de97]' : 'bg-[#48182e]'}`} />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="absolute bottom-2 left-0 right-0 px-2 flex justify-between">
-                        <button onClick={() => page === 0 ? onBack() : setPage(0)} className="w-[104px] h-[27px] rounded-[10px] bg-[#e0de97] text-[#844d68] text-sm">Назад</button>
-                        {page === 0 && <button onClick={() => setPage(1)} className="w-[104px] h-[27px] rounded-[10px] bg-[#844d68] text-[#e0de97] text-sm">Далее</button>}
-                    </div>
-                </div>
-            );
-        };
-
-        const LibraryScreen = ({ collection, onBack, onSelect }) => {
-            const items = Object.entries(collection).filter(([_, count]) => count > 0);
-            return (
-                <div className="w-full h-full p-2 relative" style={{ backgroundColor: 'rgb(54, 78, 49)' }}>
-                    <h3 className="text-center text-[#e0de97] font-bold mb-2">БИБЛИОТЕКА</h3>
-                    <div className="flex flex-col gap-1">
-                        {items.length > 0 ? items.map(([id, count]) => (
-                            <div key={id} onClick={() => onSelect(id)} className="h-[35px] px-3 flex items-center justify-between rounded-[8px] bg-[#844d68] text-[#e0de97] text-xs cursor-pointer">
-                                <span>{resultData[id].header[0]}</span>
-                                <span className="opacity-70">{count} шт.</span>
-                            </div>
-                        )) : <p className="text-center text-[#e0de97] opacity-50 text-xs mt-10">Пусто</p>}
-                    </div>
-                    <button onClick={onBack} className="absolute bottom-2 left-2 w-[104px] h-[27px] rounded-[10px] bg-[#e0de97] text-[#844d68] text-sm">Назад</button>
-                </div>
-            );
-        };
-
-        // --- MAIN APP ---
+        // --- ГЛАВНЫЙ КОМПОНЕНТ ---
 
         function App() {
             const [screen, setScreen] = useState(0);
             const [qId, setQId] = useState(1);
             const [resId, setResId] = useState(null);
-            const [notif, setNotif] = useState(null);
             const [collection, setCollection] = useState(() => JSON.parse(localStorage.getItem('plantCollection') || '{}'));
+            const [notif, setNotif] = useState(null);
 
             useEffect(() => { localStorage.setItem('plantCollection', JSON.stringify(collection)); }, [collection]);
 
-            const showNotif = (text) => {
-                setNotif(text);
-                setTimeout(() => setNotif(null), 3000);
-            };
-
             const handleAnswer = (ans) => {
                 const next = questionFlow[qId][ans ? 'true' : 'false'];
-                if (next < 0) { setResId(next); setScreen(2); }
-                else setQId(next);
+                if (next < 0) { setResId(next); setScreen(2); } 
+                else { setQId(next); }
             };
 
             return (
-                <div className="device-frame">
+                <div className="screen-container bg-black">
                     <AnimatePresence>
-                        {notif && <NotificationBlock text={notif} onDismiss={() => setNotif(null)} />}
+                        {notif && <Notification text={notif} onDismiss={() => setNotif(null)} />}
                     </AnimatePresence>
 
-                    {screen === 0 && (
-                        <SetupScreen 
-                            onStart={() => { setQId(1); setScreen(1); }} 
-                            onSettings={() => setScreen(3)}
-                            onLibrary={() => setScreen(4)}
-                            showLoading={true} 
-                        />
-                    )}
+                    {screen === 0 && <SetupScreen onStart={() => { setQId(1); setScreen(1); }} onSettings={() => setNotif("Настройки скоро появятся")} onLibrary={() => setScreen(4)} showLoading={true} />}
                     {screen === 1 && <ProcessScreen qId={qId} onAnswer={handleAnswer} onBack={() => setScreen(0)} />}
-                    {screen === 2 && (
-                        <ResultScreen 
-                            id={resId} 
-                            collection={collection} 
-                            onBack={() => setScreen(0)} 
-                            onSave={(id) => {
-                                setCollection(prev => ({...prev, [id]: (prev[id] || 0) + 1}));
-                                showNotif("Сохранено в базу данных");
-                            }}
-                            onRemove={(id) => {
-                                setCollection(prev => {
-                                    const next = {...prev};
-                                    delete next[id];
-                                    return next;
-                                });
-                                setScreen(0);
-                            }}
-                        />
+                    {screen === 2 && <ResultScreen id={resId} collection={collection} onBack={() => setScreen(0)} onSave={(id) => setCollection(prev => ({...prev, [id]: (prev[id]||0)+1}))} />}
+                    {screen === 4 && (
+                        <div className="w-full h-full p-4 bg-[#364E31] text-[#E0DE97]">
+                            <h2 className="text-center mb-4 font-serif">Библиотека</h2>
+                            {Object.entries(collection).map(([id, count]) => (
+                                <div key={id} className="flex justify-between bg-[#844D68] p-2 mb-1 rounded text-[10px]">
+                                    <span>{resultData[id]?.header[0]}</span>
+                                    <span>{count} шт.</span>
+                                </div>
+                            ))}
+                            <button onClick={() => setScreen(0)} className="absolute bottom-2 left-4 px-4 py-1 bg-[#E0DE97] text-[#844D68] rounded text-xs">Назад</button>
+                        </div>
                     )}
-                    {screen === 3 && <SettingsScreen onBack={() => setScreen(0)} />}
-                    {screen === 4 && <LibraryScreen collection={collection} onBack={() => setScreen(0)} onSelect={(id) => { setResId(id); setScreen(2); }} />}
                 </div>
             );
         }
