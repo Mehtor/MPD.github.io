@@ -145,7 +145,7 @@ async function ProcessScreen() {
             <div style="position:absolute; top:7px; left:5px; font-family:'Times New Roman'; color:${flowType===0?'white':'rgb(224,222,151)'}">${questionNow}</div>
         </div>
         <div class="question-area-false" style="background-color:${botColor}" onclick="handleTouch(0)">
-             <div class="question-text" style="top:0px; left:7px;">${qFalse}</div>
+             <div class="question-text" style="top:7px; left:7px;">${qFalse}</div>
         </div>
         <div class="process-back-btn" onclick="event.stopPropagation(); handleTouch(2)">
             <span style="color:${(questionNow == 1 && flowType == 0) ? 'red' : 'rgb(224, 222, 151)'}">Назад</span>
@@ -350,7 +350,7 @@ function questionAnswer(status) {
     }
 }
 
-// ==================== INPUT HANDLER ====================
+// ==================== TOUCH HANDLER ====================
 function handleTouch(actionID) {
     if (screenID === 0) {
         if (actionID === 10) ProcessScreen();
@@ -421,6 +421,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
