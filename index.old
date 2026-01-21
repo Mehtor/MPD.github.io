@@ -3,193 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Определитель растений</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mini-App в разработке</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 900px;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            animation: shine 6s infinite;
+            z-index: -1;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            20%, 100% { transform: translateX(100%); }
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+            bottom: -10px;
+            left: 0;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .progress-container {
+            margin-top: 40px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 12%;
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            border-radius: 5px;
+            animation: progressAnimation 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progressAnimation {
+            0% { width: 89%; }
+            100% { width: 95%; }
+        }
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-1000px) rotate(720deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="floating-elements">
+    </div>
+    
     <div class="container">
-        <!-- Уведомление -->
-        <div class="notification" id="notification">
-            <div class="notification-content">
-                <i class="fas fa-bell"></i>
-                <span id="notification-text">Обновление готово</span>
-            </div>
+        <div class="logo">
+            <i class="fas fa-cogs"></i>
         </div>
-
-        <!-- Главный экран -->
-        <div class="screen" id="setup-screen">
-            <div class="header">
-                <h1>Определитель растений</h1>
+        
+        <h1>Mini-App в разработке</h1>
+        
+        <p class="subtitle">
+            Скоро здесь может появится веб копия интерфейса существующего прототипа Plant Daterminant #202516521
+        </p>
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Процесс разработки</span>
+                <span>92%</span>
             </div>
-            
-            <div class="loading-bar">
-                <div class="loading-progress" id="loading-progress"></div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
-            
-            <div class="buttons-grid">
-                <button class="menu-btn" id="start-work">
-                    <i class="fas fa-play"></i>
-                    <span>НАЧАТЬ РАБОТУ</span>
-                </button>
-                <button class="menu-btn" id="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>НАСТРОЙКИ</span>
-                </button>
-                <button class="menu-btn" id="library">
-                    <i class="fas fa-book"></i>
-                    <span>БИБЛИОТЕКА</span>
-                </button>
-            </div>
-            
-            <div class="wifi-indicator" id="wifi-indicator">
-                <div class="wifi-bar strong"></div>
-                <div class="wifi-bar medium"></div>
-                <div class="wifi-bar weak"></div>
-            </div>
-        </div>
-
-        <!-- Экран определения -->
-        <div class="screen" id="process-screen" style="display: none;">
-            <div class="process-header">
-                <div class="question-number" id="question-number">1</div>
-                <div class="flow-indicator">
-                    <span id="flow-type">Основной поток</span>
-                </div>
-            </div>
-            
-            <div class="question-section true-section">
-                <div class="section-label">ДА</div>
-                <div class="question-text" id="question-true">
-                    Листья, спороносные и бесплодные, все одинаковые
-                </div>
-            </div>
-            
-            <div class="question-section false-section">
-                <div class="section-label">НЕТ</div>
-                <div class="question-text" id="question-false">
-                    Спороносные листья резко отличаются от бесплодных
-                </div>
-            </div>
-            
-            <button class="back-btn" id="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                <span>Назад</span>
-            </button>
-        </div>
-
-        <!-- Экран результата -->
-        <div class="screen" id="result-screen" style="display: none;">
-            <div class="result-header">
-                <h2 id="result-title">Пузырник ломкий</h2>
-            </div>
-            
-            <div class="result-content">
-                <div class="result-page active" id="result-page-0">
-                    <div class="result-text">
-                        Спорангии собраны в округлые кучки, расположенные по середине боковых жилок...
-                    </div>
-                </div>
-                <div class="result-page" id="result-page-1" style="display: none;">
-                    <div class="result-text">
-                        Листья дважды-перистораздельные, в очертании продолговатоланцетные...
-                    </div>
-                </div>
-                <div class="result-page" id="result-page-2" style="display: none;">
-                    <div class="result-text">
-                        Рост 10-30 см. Споры в июне-августе...
-                    </div>
-                </div>
-                <div class="result-page" id="result-page-3" style="display: none;">
-                    <div class="result-text">
-                        Имеет очень широкое распространение...
-                    </div>
-                </div>
-                <div class="result-page" id="result-page-4" style="display: none;">
-                    <div class="result-text">
-                        Молодые листья обладают запахом горького миндаля...
-                    </div>
-                </div>
-            </div>
-            
-            <div class="result-controls">
-                <button class="control-btn" id="result-prev">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="control-btn" id="result-save">
-                    <i class="fas fa-save"></i>
-                    <span>Сохранить</span>
-                </button>
-                <button class="control-btn" id="result-next">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-            
-            <div class="collection-indicator" id="collection-indicator" style="display: none;">
-                <i class="fas fa-trash"></i>
-                <span id="collection-count">1</span>
-            </div>
-        </div>
-
-        <!-- Экран настроек -->
-        <div class="screen" id="settings-screen" style="display: none;">
-            <div class="settings-header">
-                <h2>Настройки</h2>
-            </div>
-            
-            <div class="settings-list">
-                <!-- Настройки будут добавляться динамически -->
-            </div>
-            
-            <div class="settings-controls">
-                <button class="control-btn" id="settings-back">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Назад</span>
-                </button>
-                <button class="control-btn" id="settings-next">
-                    <span>Дальше</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Экран библиотеки -->
-        <div class="screen" id="library-screen" style="display: none;">
-            <div class="library-header">
-                <h2>Библиотека</h2>
-            </div>
-            
-            <div class="library-list" id="library-list">
-                <!-- Библиотека будет заполняться динамически -->
-            </div>
-            
-            <div class="library-controls">
-                <button class="control-btn" id="library-back">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Назад</span>
-                </button>
-                <button class="control-btn" id="library-next">
-                    <span>Дальше</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Экран сна -->
-        <div class="screen" id="sleep-screen" style="display: none;">
-            <div class="sleep-content">
-                <i class="fas fa-moon"></i>
-                <h2>zzz...</h2>
-                <p>Коснитесь экрана для пробуждения</p>
-            </div>
-        </div>
-
-        <!-- Кнопка питания -->
-        <div class="power-btn" id="power-btn">
-            <i class="fas fa-power-off"></i>
         </div>
     </div>
+    <audio id="background-music" loop>
+        <source src="https://s3.deliciouspeaches.com/get/music/20230619/ANGELPLAYA_-_DANGEROUS_76163563.mp3" type="audio/mpeg">
+        ---
+    </audio>
+    <script>
+        const floatingElements = document.querySelector('.floating-elements');
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.classList.add('floating-element');
+            
+            const size = Math.random() * 60 + 20;
+            element.style.width = `${size}px`;
+            element.style.height = `${size}px`;
+            
+            element.style.left = `${Math.random() * 100}%`;
+            element.style.top = `${Math.random() * 100}%`;
+            
+            element.style.animationDelay = `${Math.random() * 5}s`;
+            element.style.animationDuration = `${Math.random() * 20 + 10}s`;
+            
+            floatingElements.appendChild(element);
+        }
 
-    <script src="script.js"></script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('background-music');
+            music.volume = 0;
+            music.currentTime = 40;
+            const fadeDuration = 3000;
+            function fadeIn() {
+                const startTime = Date.now();
+                const startVolume = music.volume;
+                
+                function updateVolume() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / fadeDuration, 1);
+                    
+                    const easedProgress = 1 - Math.pow(1 - progress, 3);
+                    music.volume = startVolume + (0.3 - startVolume) * easedProgress;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateVolume);
+                    }
+                }
+                
+                updateVolume();
+            }
+            const playMusic = () => {
+                music.play().catch(error => {
+                    console.log('Автозапуск заблокирован браузером:', error);
+                });
+                fadeIn();
+            };
+            
+            setTimeout(playMusic, 750);
+        });
+    </script>
 </body>
 </html>
