@@ -1,0 +1,314 @@
+Щитовник болотный;Dryopteris thelypteris (L) A Gray
+Кочедыжник женский;Athyrium filix-femina (L) Roth
+Щитовник мужской;Dryopteris filix-mas (L) Schott
+Орляк;Pteridium aquilinum (L) Kuhn
+Гроздовник полулунный;Botrychium lunaria (L) Sw
+Хвощ полевой;Equisetum arvense L
+Хвощ луговой;Equisetum pratense Ehrh
+Хвощ лесной;Equisetum sylvaticum L
+Хвощ болотный;Equisetum palustre L
+Хвощ топяной;Equisetum heleocharis Ehrh
+Плаун баранец;Lycopodium selago L
+Плаун годичный;Lycopodium annotinum L
+Плаун булавовидный;Lycopodium clavatum L
+Плаун сплюснутый;Lycopodium anceps Wallr
+Полушник озёрный;Isoetes lacustris L
+Пихта сибирская;Abies sibirica Ledb
+Ель высокая;Picea excelsa Link
+Лиственница русская;Larix russica (Endl) Trautv
+Сибирская кедровая сосна;Pinus sibirica Mayr
+Сосна лесная;Pinus sylvestris L
+Можжевельник обыкновенный;Juniperus communis L
+Ежеголовник многогранный;Sparganium polyedrum Asch et Gr
+Ежеголовник простой;Sparganium simplex Huds
+Рдест гребенчатый;Potamogeton pectinatus L
+Рдест курчавый;Potamogeton crispus L
+Рдест маленький;Potamogeton pusillus L
+Рдест плавающий;Potamogeton natans L
+Рдест блестящий;Potamogeton lucens L
+Рдест пронзеннолистный;Potamogeton perfoliatus L
+Наяда малая;Najas minor All
+Шейхцерия болотная;Scheuchzeria palustris L
+Триостренник болотный;Triglochin palustris L
+Частуха водяная;Alisma plantago-aquatica L
+Стрелолист стрелолистный;Sagittaria sagittifolia L
+Сусак зонтичный;Butomus umbellatus L
+Элодея канадская;Elodea canadensis Rich
+Телорез;Stratiotes aloides L
+Водокрас лягушачий;Hydrocharis morsus-ranae L
+Кукуруза;Zea mays L
+Ежовник обыкновенный;Echinochloa crus-galli (L) PB
+Просо посевное;Panicum miliaceum L
+Щетинник зелёный;Setaria viridis (L) PB
+Двукисточник тростниковидный;Digraphis arundinacea (L) Trin
+Душистый колосок;Anthoxanthum odoratum L
+Зубровка душистая;Hierochloe odorata (L) Wahlb
+Бор развесистый;Milium effusum L
+Лисохвост луговой;Alopecurus pratensis L
+Лисохвост коленчатый;Alopecurus geniculatus L
+Лисохвост равный;Alopecurus aequalis Sobol
+Полевица белая;Agrostis alba L
+Полевица обыкновенная;Agrostis vulgaris With
+Полевица собачья;Agrostis canina L
+Вейник ланцетный;Calamagrostis lanceolata Roth
+Вейник незамечаемый;Calamagrostis neglecta Ehrh
+Вейник тростниковидный;Calamagrostis arundinacea Roth
+Вейник наземный;Calamagrostis epigeios Roth
+Вейник Лангсдорфа;Calamagrostis Langsdorfii Trin
+Бухарник шерстистый;Holcus lanatus L
+Щучка дернистая;Deschampsia caespitosa PB
+Овёс посевной;Avena sativa L
+Овсюг;Avena fatua L
+Овсец пушистый;Avenastrum pubescens Jessen
+Молиния голубая;Molinia caerulea Moench
+Тростник обыкновенный;Phragmites communis Trin
+Тонконог стройный;Koeleria gracilis Pers
+Тонконог польский;Koeleria polonica Dom
+Перловник поникший;Melica nutans L
+Трясунка средняя;Briza media L
+Ежа сборная;Dactylis glomerata L
+Гребенник обыкновенный;Cynosurus cristatus L
+Мятлик однолетний;Poa annua L
+Мятлик лесной;Poa nemoralis L
+Мятлик болотный;Poa palustris L
+Мятлик обыкновенный;Poa trivialis L
+Мятлик луговой;Poa pratensis L
+Мятлик сплюснутый;Poa compressa L
+Поручейница водяная;Catabrosa aquatica (L) PB
+Манник наплывающий;Glyceria fluitans RBr
+Манник водяной;Glyceria aquatica Wahlb
+Овсяница овечья;Festuca ovina L
+Овсяница красная;Festuca rubra L
+Овсяница луговая;Festuca pratensis Huds
+Овсяница исполинская;Festuca gigantea Vill
+Плевел опьяняющий;Lolium temulentum L
+Плевел льняной;Lolium remotum Schrank
+Плевел многолетний;Lolium perenne L
+Костер безостый;Bromus inermis Leyss
+Костер ржаной;Bromus secalinus L
+Костер полевой;Bromus arvensis L
+Костер мягкий;Bromus mollis L
+Белоус торчащий;Nardus stricta L
+Коротконожка перистая;Brachypodium pinnatum (L) PB
+Коротконожка лесная;Brachypodium silvaticum (Huds) PB
+Пырей ползучий;Agropyron repens (L) PB
+Рожь посевная;Secale cereale L
+Пшеница мягкая;Triticum aestivum L
+Пшеница твердая;Triticum durum Desf
+Ячмень обыкновенный;Hordeum vulgare L
+Ячмень двурядный;Hordeum distichum L
+Пушица узколистная;Eriophorum angustifolium Roth
+Пушица широколистная;Eriophorum latifolium Hoppe
+Пушица влагалищная;Eriophorum vaginatum L
+Камыш лесной;Scirpus silvaticus L
+Камыш озерный;Scirpus lacustris L
+Болотница болотная;Heleocharis palustris (L) RBr
+Осока ранняя;Carex praecox Schreb
+Осока заячья;Carex leporina L
+Осока лисья;Carex vulpina L
+Осока колючая;Carex muricata L
+Осока сероватая;Carex canescens L
+Осока удлиненная;Carex elongata L
+Осока раздвинутая;Carex remota L
+Осока дернистая;Carex caespitosa L
+Осока острая;Carex acuta L
+Осока черная;Carex nigra (L) Reichard
+Осока весенняя;Carex verna Chaix
+Осока пальчатая;Carex digitata L
+Осока горная;Carex montana L
+Осока верещатниковая;Carex ericetorum Poll
+Осока бледноватая;Carex pallescens L
+Осока просяная;Carex panicea L
+Осока топяная;Carex limosa L
+Осока волосистая;Carex pilosa Scop
+Осока желтая;Carex flava L
+Осока лесная;Carex silvatica Hudson
+Осока волосовидная;Carex capillaris L
+Осока береговая;Carex riparia Curtis
+Осока волосистоплодная;Carex lasiocarpa Ehrh
+Осока вздутая;Carex inflata Huds
+Осока пузырчатая;Carex vesicaria L
+Осока мохнатая;Carex hirta L
+Осока ложносытевидная;Carex pseudocyperus L
+Чемерица Лобеля;Veratrum lobelianum Bernh
+Рябчик русский;Fritillaria ruthenica Wickstr
+Тюльпан Биберштейна;Tulipa biebersteiniana Schult
+Гусиный лук желтый;Gagea lutea (L) Ker-Gawl
+Гусиный лук малый;Gagea minima (L) Ker-Gawl
+Лук медвежий;Allium ursinum L
+Лук огородный;Allium oleraceum L
+Лилия кудреватая;Lilium martagon L
+Спаржа лекарственная;Asparagus officinalis L
+Майник двулистный;Majanthemum bifolium (L) F W Schmidt
+Ландыш майский;Convallaria majalis L
+Купена лекарственная;Polygonatum officinale All
+Купена многоцветковая;Polygonatum multiflorum (L) All
+Вороний глаз четырёхлистный;Paris quadrifolia L
+Венерин башмачок;Cypripedium calceolus L
+Ятрышник шлемовидный;Orchis militaris L
+Ятрышник пятнистый;Orchis maculata L
+Любка двулистная;Platanthera bifolia (L) Rich
+Дремлик широколистный;Epipactis latifolia (L) All
+Тайник яйцевидный;Listera ovata (L) R Br
+Гнездовка настоящая;Neottia nidus-avis (L) Rich
+Борец шерстистоустый;Aconitum lasiostomum Reichb
+Водяной орех плавающий;Trapa natans L
+Ива ушастая;Salix aurita L
+Ива черничная;Salix myrtilloides L
+Ива розмаринолистная;Salix rosmarinifolia L
+Ива корзиночная;Salix viminalis L
+Ива козья;Salix caprea L
+Ива пятитычинковая;Salix pentandra L
+Ива ломкая;Salix fragilis L
+Ива белая;Salix alba L
+Ива пепельная;Salix cinerea L
+Тополь чёрный;Populus nigra L
+Тополь дрожащий;Populus tremula L
+Лещина обыкновенная;Corylus avellana L
+Берёза карликовая;Betula nana L
+Берёза приземистая;Betula humilis Schrank
+Берёза бородавчатая;Betula verrucosa Ehrh
+Ольха клейкая;Alnus glutinosa (L) Gaertn
+Ольха серая;Alnus incana (L) Moench
+Дуб черешчатый;Quercus robur L
+Хмель вьющийся;Humulus lupulus L
+Конопля посевная;Cannabis sativa L
+Крапива двудомная;Urtica dioica L
+Крапива жгучая;Urtica urens L
+Щавель курчавый;Rumex crispus L
+Щавель водяной;Rumex aquaticus L
+Щавель туполистный;Rumex obtusifolius L
+Щавель морской;Rumex maritimus L
+Горец птичий;Polygonum aviculare L
+Горец земноводный;Polygonum amphibium L
+Горец кустарниковый;Polygonum dumetorum L
+Гречиха посевная;Fagopyrum sagittatum Gilib
+Свекловица;Beta vulgaris L
+Марь многосеменная;Chenopodium polyspermum L
+Марь белая;Chenopodium album L
+Шпинат огородный;Spinacia oleracea L
+Лебеда лоснящаяся;Atriplex nitens Schkuhr
+Лебеда татарская;Atriplex tatarica L
+Амарант запрокинутый;Amaranthus retroflexus L
+Мягковолосник водяной;Malachium aquaticum (L) Fries
+Ясколка дернистая;Cerastium caespitosum Gilib
+Мшанка узловатая;Sagina nodosa (L) Fenzl
+Мшанка лежачая;Sagina procumbens L
+Песчанка тимьянолистная;Arenaria serpyllifolia L
+Дивала однолетняя;Scleranthus annuus L
+Торица посевная;Spergula sativa Boenn
+Смолёвка поникшая;Silene nutans L
+Живокость высокая;Delphinium elatum L
+Печеночница благородная;Hepatica nobilis Gars
+Калужница болотная;Caltha palustris L
+Купальница европейская;Trollius europaeus L
+Воронец колосовидный;Actaea spicata L
+Шелковник фенхелелистный;Batrachium foeniculaceum (Gilib) Krecz
+Лютик кашубский;Ranunculus cassubicus L
+Лютик ядовитый;Ranunculus sceleratus L
+Лютик ползучий;Ranunculus repens L
+Лютик едкий;Ranunculus acer L
+Лютик едкий;Ranunculus acer L
+Василистник водосборолистный;Thalictrum aquilegifolium L
+Смородина красная;Ribes rubrum L
+Свербига восточная;Bunias orientalis L
+Кассандра;Chamaedaphne calyculata (L) Moench
+Толокнянка;Arctostaphylos uva-ursi (L) Spreng
+Вечерница;Hesperis matronalis L
+Луговой чай;Lysimachia nummularia L
+Седмичник европейский;Trientalis europaea L
+Кермек Гмелина;Limonium Gmelini (Willd) Ktze
+Сирень обыкновенная;Syringa vulgaris L
+Вахта трехлистная;Menyanthes trifoliata L
+Ластовень лекарственный;Antitoxicum officinale Pobed (Vincetoxicum officinale)
+Синюха голубая;Polemonium coeruleum L
+Повилика хмелевидная;Cuscuta lupuliformis Krocker
+Камнеломка болотная;Saxifraga hirculus L
+Воронец колосовидный;Actaea spicata L
+Смородина красная;Ribes rubrum L
+Кровохлебка лекарственная;Sanguisorba officinalis L
+Земляника лесная;Fragaria vesca L
+Лапчатка белая;Potentilla alba L
+Лапчатка гусиная;Potentilla anserina L
+Гравилат городской;Geum urbanum L
+Манжетка обыкновенная;Alchemilla vulgaris L
+Мак самосейка;Papaver rhoeas L
+Стальник пашенный;Ononis arvensis L
+Люцерна серповидная;Medicago falcata L
+Люцерна посевная;Medicago sativa L
+Язвенник многолистный;Anthyllis polyphylla Kit
+Вязель пёстрый;Coronilla varia L
+Эспарцет виколистный;Onobrychis viciaefolia Scop
+Мышиный горошек;Vicia cracca L
+Горошек тонколистный;Vicia tenuifolia Roth
+Горошек заборный;Vicia sepium L
+Вика посевная;Vicia sativa L
+Чина луговая;Lathyrus pratensis L
+Чина клубненосная;Lathyrus tuberosus L
+Чина гороховидная;Lathyrus pisiformis L
+Чина весенняя;Lathyrus vernus (L) Bernh
+Горох посевной;Pisum sativum L
+Герань болотная;Geranium palustre L
+Аистник;Erodium cicutarium (L) L'Her
+Кисличка обыкновенная;Oxalis acetosella L
+Кисличка торчащая;Oxalis stricta L
+Лён жёлтый;Linum flavum L
+Истод обыкновенный;Polygala vulgaris L
+Истод хохлатый;Polygala comosa Schk
+Молочай солнцегляд;Euphorbia helioscopia L
+Молочай прутьевидный;Euphorbia virgata W K
+Пролеска многолетняя;Mercurialis perennis L
+Молочай полумохнатый;Euphorbia semivillosa Prokh
+Молочай болотный;Euphorbia palustris L
+Клен платановидный;Acer platanoides L
+Фиалка болотная;Viola palustris L
+Фиалка опушенная;Viola hirta L
+Фиалка душистая;Viola odorata L
+Фиалка удивительная;Viola mirabilis L
+Фиалка трехцветная;Viola tricolor L
+Фиалка низкая;Viola pumila Chaix
+Волчник обыкновенный;Daphne mezereum L
+Облепиха крушиновидная;Hippophae rhamnoides L
+Лох узколистный;Elaeagnus angustifolia L
+Кипрей волосистый;Epilobium hirsutum L
+Кипрей горный;Epilobium montanum L
+Кипрей болотный;Epilobium palustre L
+Иван-чай узколистный;Chamaenerion angustifolium (L) Scop
+Уруть мутовчатая;Myriophyllum verticillatum L
+Уруть колосистая;Myriophyllum spicatum L
+Синеголовник плосколистный;Eryngium planum L
+Цирцея альпийская;Circaea alpina L
+Поручейник широколистный;Sium latifolium L
+Порезник промежуточный;Libanotis intermedia Rupr
+Поручейник широколистный;Sium latifolium L
+Омежник водяной;Oenanthe aquatica (L) Poir
+Свидина белая;Thelycrania alba Pojark (Cornus tatarica Mill)
+Горичник болотный;Peucedanum palustre (L) Moench
+Укроп пахучий;Anethum graveolens L
+Рамишия однобокая;Ramischia secunda (L) Garcke
+Одноцветка крупноцветная;Moneses uniflora (L) A Gray
+Грушанка круглолистная;Pirola rotundifolia L
+Подъельник обыкновенный;Hypopitys monotropa Crantz
+Багульник болотный;Ledum palustre L
+Кассандра;Chamaedaphne calyculata (L) Moench
+Толокнянка;Arctostaphylos uva-ursi (L) Spreng
+Турча болотная;Hottonia palustris L
+Седмичник европейский;Trientalis europaea L
+Кермек Гмелина;Limonium Gmelini (Willd) Ktze
+Сирень обыкновенная;Syringa vulgaris L
+Ясень обыкновенный;Fraxinus excelsior L
+Вахта трехлистная;Menyanthes trifoliata L
+Ластовень лекарственный;Antitoxicum officinale Pobed
+Повилика хмелевидная;Cuscuta lupuliformis Krocker
+Липучка ежевидная;Lappula echinata Gilib
+Синяк красный;Echium rubrum Forsk
+Кривоцвет полевой;Lycopsis arvensis L
+Чернокорень лекарственный;Cynoglossum officinale L
+Незабудка болотная;Myosotis palustris (L) Hill
+Незабудка мелкоцветковая;Myosotis micrantha Pall
+Воробейник полевой;Lithospermum arvense L
+Оносма простейшая;Onosma simplicissimum L
+Окопник лекарственный;Symphytum officinale L
+Острица простертая;Asperugo procumbens L
+Медуница неясная;Pulmonaria obscura Dumort
+Черноголовка обыкновенная;Prunella vulgaris L
