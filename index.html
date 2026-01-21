@@ -13,4 +13,42 @@
     </div>
     <script src="script.js"></script>
 </body>
+    <audio id="background-music" loop>
+        <source src="https://s3.deliciouspeaches.com/get/music/20230619/ANGELPLAYA_-_DANGEROUS_76163563.mp3" type="audio/mpeg">
+        ---
+    </audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('background-music');
+            music.volume = 0;
+            music.currentTime = 40;
+            const fadeDuration = 3000;
+            function fadeIn() {
+                const startTime = Date.now();
+                const startVolume = music.volume;
+                
+                function updateVolume() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / fadeDuration, 1);
+                    
+                    const easedProgress = 1 - Math.pow(1 - progress, 3);
+                    music.volume = startVolume + (0.3 - startVolume) * easedProgress;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateVolume);
+                    }
+                }
+                
+                updateVolume();
+            }
+            const playMusic = () => {
+                music.play().catch(error => {
+                    console.log('Автозапуск заблокирован браузером:', error);
+                });
+                fadeIn();
+            };
+            
+            setTimeout(playMusic, 750);
+        });
+    </script>
 </html>
