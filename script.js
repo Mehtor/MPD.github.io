@@ -147,7 +147,7 @@ async function ProcessScreen() {
         <div class="question-area-false" style="background-color:${botColor}" onclick="handleTouch(0)">
              <div class="question-text" style="top:0px; left:7px;">${qFalse}</div>
         </div>
-        <div class="process-back-btn" style="background:transparent" onclick="event.stopPropagation(); handleTouch(2)">
+        <div class="process-back-btn" onclick="event.stopPropagation(); handleTouch(2)">
             <span style="color:${(questionNow == 1 && flowType == 0) ? 'red' : 'rgb(224, 222, 151)'}">Назад</span>
         </div>
     `;
@@ -421,6 +421,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
