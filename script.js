@@ -184,7 +184,7 @@ async function ResultScreen(mode) {
 
     let fullText = await fileSystem.readSpecificLine("resultTextShort.txt", questionNow * -1);
 
-    canBeContinuedScroling = fullText.length > 100 * (pageID + 1); 
+    canBeContinuedScroling = fullText.length > 250 * (pageID + 1); 
     
     if (canBeContinuedScroling) {
         html += `<div class="btn" style="left:50px; top:283px; width:25px; height:25px; border-radius:5px; background-color:rgb(149, 112, 130); color:rgb(224, 222, 151); font-size:20px;" onclick="handleTouch(21)">&gt;</div>`;
@@ -197,7 +197,7 @@ async function ResultScreen(mode) {
         <div>${parts[1] || ''}</div>
     </div>`;
 
-    let displayText = fullText.substring(pageID * 100, (pageID + 1) * 100);
+    let displayText = fullText.substring(pageID * 250, (pageID + 1) * 250);
     html += `<div style="position:absolute; top:60px; left:5px; width:230px; font-family:'CourierCyr'; color:rgb(175, 163, 134); font-size:14px; white-space: pre-wrap;">${displayText}</div>`;
 
     tftScreen.innerHTML = html;
@@ -421,6 +421,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
