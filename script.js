@@ -561,9 +561,9 @@ function SetupScreen(loadingProcess) {
         
         html += drawWiFiIndicator();
     }
-    html += `<div style="position:absolute; top:29px; left:10px; width:221px; height:76px; background-color:rgb(109, 143, 65); border-radius:10px;"></div>`;
+    html += `<div style="position:absolute; top:29px; left:10px; width:221px; height:76px; background-color:rgb(109, 143, 65); border-radius:10px;">`;
     html += `<div style="position:absolute; top:38px; left:34px; font-family:'Bahamas'; font-size:24px; color:rgb(224, 222, 151);">Определитель</div>`;
-    html += `<div style="position:absolute; top:68px; left:67px; font-family:'Bahamas'; font-size:24px; color:rgb(224, 222, 151);">растений</div>`;
+    html += `<div style="position:absolute; top:68px; left:67px; font-family:'Bahamas'; font-size:24px; color:rgb(224, 222, 151);">растений</div></div>`;
 
     if (loadingProcess != 227) {
         html += `<div style="position:absolute; bottom:17px; left:6px; width:227px; height:19px; background-color:rgb(238, 246, 210); border-radius:10px;"></div>`;
@@ -888,6 +888,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
