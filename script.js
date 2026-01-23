@@ -679,7 +679,7 @@ function SettingsScreen(fullRedraw) {
     tftScreen.className = 'screen bg-settings-dark';
     let html = '';
 
-    html += `<div style="position:absolute; top:35px; left:59px; font-family:'Bahamas'; font-size:16px; color:white;">Настройки</div>`;
+    html += `<div style="position:absolute; top:10px; left:80px; font-family:'Bahamas'; font-size:18px; color:white;">Настройки</div>`;
 
     html += `<div class="nav-btn" style="left:9px; top:289px; background-color:${pageID==0 ? 'rgb(224,222,151)' : 'rgb(132,77,104)'}; color:${pageID==0 ? 'rgb(132,77,104)' : 'rgb(224,222,151)'};" onclick="handleTouch(30)">Назад</div>`;
     
@@ -888,6 +888,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
