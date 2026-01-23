@@ -601,8 +601,8 @@ async function ProcessScreen() {
         qFalse = await fileSystem.readSpecificLine("questions_false.txt", questionNow);
     } else {
         if (SpeciesDeterminant[familyID]) {
-            qTrue = SpeciesDeterminant[familyID].Species_questions_true[questionNow - 1] || "";
-            qFalse = SpeciesDeterminant[familyID].Species_questions_false[questionNow - 1] || "";
+            qTrue = SpeciesDeterminant[familyID].Species_questions_true[questionNow - 1];
+            qFalse = SpeciesDeterminant[familyID].Species_questions_false[questionNow - 1];
         }
     }
 
@@ -888,6 +888,7 @@ window.onload = function() {
     SetupScreen(227);
 
 };
+
 
 
 
