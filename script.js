@@ -6,6 +6,7 @@ const goto_if_true = [
 const goto_if_false = [
   0, 120, 3, 5, -20, 6, 7, 1049, 98, 10, 11, 13, 1127, 14, 15, 17, 1072, 18, 1216, -493, 21, 22, 23, 26, 1524, -670, 27, 28, 30, 1451, 33, 32, -630, 41, 35, 36, 37, 38, 39, 40, 1247, 54, 43, 44, 47, 46, -564, 50, 49, 1529, 52, 1170, 53, -215, 56, -522, 57, 69, 59, 60, 62, -538, 63, 64, 67, 66, 1443, 68, 1479, 70, 74, 72, 73, -40, 84, 76, 77, 78, 79, 80, 81, 1294, 83, 1424, 85, 86, 90, 83, 89, 1149, 95, 93, -339, 94, 1216, 96, 97, -446, 99, 100, 106, -293, 104, 1244, 105, -34, 111, 108, 109, 110, -452, 112, 113, -279, 115, 116, 118, -605, 119, 1247, 122, 1062, 146, 143, 125, 126, 127, -207, 129, 140, 131, 132, 133, 134, 135, 136, 137, 138, 139, 1427, 142, 1516, 1432, 145, -469, 1304, 149, 148, -207, 151, -540, 1198, 153, 1377
 ];
+
 const SpeciesDeterminant = {
     1: { // Семейство POLYPODIACEAE
         Species_Header: "СЕМ. POLYPODIACEAE\nПАПОРОТНИКОВЫЕ",
@@ -519,7 +520,7 @@ const fileSystem = {
     }
 };
 
-
+// ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
 let screenID = 0;
 let pageID = 0;
 let flowType = 0; // 0 -> Main flow, 1 -> Species flow
@@ -529,7 +530,7 @@ let previousQuestionAtMainFlow = 0;
 let familyID = 1;
 let menuItemID = 0;
 let canBeContinuedScroling = false;
-let collection = new Array(120).fill(0);
+let collection = []; // будет инициализирован после загрузки с сервера
 let settings = {
   useWiFi: true,
   WiFiRealTimeSerch: false,
@@ -542,10 +543,125 @@ let settings = {
   sendDebugData: true
 };
 
+let deviceCode = null;
+let syncInProgress = false;
+const MAX_SPECIES_ID = 2000; // Достаточно для всех ID видов (отрицательные номера вопросов)
+
 const tftScreen = document.getElementById('tft-screen');
 
-// ==================== FUNCTIONS ====================
+// ==================== РАБОТА С COOKIE ====================
+function setCookie(name, value, days = 365) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
 
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
+// ==================== API ВЗАИМОДЕЙСТВИЕ ====================
+async function fetchCollectionFromServer(code) {
+    try {
+        const url = `https://api.mehtor.ru/planti/gui?code=${encodeURIComponent(code)}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        if (data && typeof data.weight === 'string') {
+            return data.weight;
+        }
+        return null;
+    } catch (error) {
+        console.error('Ошибка загрузки коллекции:', error);
+        return null;
+    }
+}
+
+async function syncCollectionToServer() {
+    if (!deviceCode || syncInProgress) return;
+    syncInProgress = true;
+    try {
+        // Формируем строку весов: от ID 1 до MAX_SPECIES_ID
+        const weightParts = [];
+        for (let i = 1; i <= MAX_SPECIES_ID; i++) {
+            weightParts.push(collection[i] || 0);
+        }
+        const weightString = weightParts.join(',');
+        
+        const url = `https://api.mehtor.ru/planti/gui?code=${encodeURIComponent(deviceCode)}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ weight: weightString })
+        });
+        if (!response.ok) {
+            console.warn('Синхронизация не удалась:', response.status);
+        } else {
+            console.log('Коллекция синхронизирована с сервером');
+        }
+    } catch (error) {
+        console.error('Ошибка синхронизации:', error);
+    } finally {
+        syncInProgress = false;
+    }
+}
+
+// Инициализация коллекции из строки весов (формат "0,0,1,0,2,...")
+function initCollectionFromWeightString(weightStr) {
+    const newCollection = new Array(MAX_SPECIES_ID + 1).fill(0);
+    if (!weightStr) return newCollection;
+    
+    const parts = weightStr.split(',');
+    for (let i = 0; i < parts.length && i < MAX_SPECIES_ID; i++) {
+        const val = parseInt(parts[i], 10);
+        if (!isNaN(val) && val > 0) {
+            newCollection[i + 1] = val; // ID = индекс + 1
+        }
+    }
+    return newCollection;
+}
+
+// ==================== ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ ====================
+async function initApp() {
+    // 1. Получаем код устройства
+    let code = getCookie('deviceCode');
+    if (!code) {
+        code = prompt('Введите код устройства для доступа к вашей коллекции растений:');
+        if (code && code.trim()) {
+            code = code.trim();
+            setCookie('deviceCode', code);
+        } else {
+            // Если код не введён, работаем без синхронизации
+            console.warn('Код устройства не введён, синхронизация отключена');
+            deviceCode = null;
+            collection = new Array(MAX_SPECIES_ID + 1).fill(0);
+            SetupScreen(227);
+            return;
+        }
+    }
+    deviceCode = code;
+    
+    // 2. Загружаем коллекцию с сервера
+    const weightString = await fetchCollectionFromServer(deviceCode);
+    if (weightString) {
+        collection = initCollectionFromWeightString(weightString);
+        console.log('Коллекция загружена с сервера');
+    } else {
+        // Если не загрузилось, начинаем с пустой
+        collection = new Array(MAX_SPECIES_ID + 1).fill(0);
+        console.warn('Не удалось загрузить коллекцию, начинаем с пустой');
+    }
+    
+    // 3. Запускаем главный экран
+    SetupScreen(227);
+}
+
+// ==================== ФУНКЦИИ ИНТЕРФЕЙСА ====================
 function SetupScreen(loadingProcess) {
     screenID = 0;
     flowType = 0;
@@ -631,7 +747,8 @@ async function ResultScreen(mode) {
     let html = '';
     tftScreen.className = 'screen bg-dark-purple';
     
-    const inCollection = collection[Math.abs(questionNow)] > 0;
+    const speciesId = Math.abs(questionNow);
+    const inCollection = collection[speciesId] > 0;
     const btnColor = inCollection ? 'rgb(224, 222, 151)' : 'rgb(149, 112, 130)';
     const textColor = inCollection ? 'rgb(149, 112, 130)' : 'rgb(224, 222, 151)';
     const btnText = inCollection ? "Добавить" : "Сохранить";
@@ -642,7 +759,7 @@ async function ResultScreen(mode) {
 
     if (inCollection) {
          html += `<div class="btn" style="left:100px; top:283px; width:25px; height:25px; border-radius:5px; background-color:rgb(149, 112, 130);" onclick="handleTouch(23)">🗑️</div>`;
-         html += `<div style="position:absolute; right:10px; top:20px; font-family:'Bahamas'; font-size:24px; color:white;">${collection[Math.abs(questionNow)]}</div>`;
+         html += `<div style="position:absolute; right:10px; top:20px; font-family:'Bahamas'; font-size:24px; color:white;">${collection[speciesId]}</div>`;
     }
 
     const backBtnColor = (pageID == 0) ? 'rgb(224, 222, 151)' : 'rgb(149, 112, 130)';
@@ -719,9 +836,10 @@ async function LibraryScreen(fullRedraw) {
 
     html += `<div class="nav-btn" style="left:9px; top:289px; background-color:${pageID==0 ? 'rgb(224,222,151)' : 'rgb(132,77,104)'}; color:${pageID==0 ? 'rgb(132,77,104)' : 'rgb(224,222,151)'};" onclick="handleTouch(40)">Назад</div>`;
 
+    // Собираем все виды, которые есть в коллекции (количество > 0)
     let listSelectHelper = [];
-    for(let i=0; i<collection.length; i++) {
-        if(collection[i] > 0) {
+    for (let i = 1; i <= MAX_SPECIES_ID; i++) {
+        if (collection[i] > 0) {
             listSelectHelper.push({
                 id: i,
                 header: await fileSystem.readSpecificLine("resultTextHeader.txt", -i),
@@ -817,8 +935,24 @@ function questionAnswer(status) {
     }
 }
 
+// ==================== ОБНОВЛЕНИЕ КОЛЛЕКЦИИ С СИНХРОНИЗАЦИЕЙ ====================
+async function updateCollection(speciesId, delta) {
+    const newValue = (collection[speciesId] || 0) + delta;
+    if (newValue < 0) return false;
+    if (newValue === 0) {
+        delete collection[speciesId];
+    } else {
+        collection[speciesId] = newValue;
+    }
+    // Синхронизируем с сервером, если есть код устройства
+    if (deviceCode) {
+        await syncCollectionToServer();
+    }
+    return true;
+}
+
 // ==================== TOUCH HANDLER ====================
-function handleTouch(actionID) {
+async function handleTouch(actionID) {
     if (screenID === 0) {
         if (actionID === 10) ProcessScreen();
         if (actionID === 11) SettingsScreen(true);
@@ -828,6 +962,7 @@ function handleTouch(actionID) {
         questionAnswer(actionID);
     }
     else if (screenID === 2) {
+        const speciesId = Math.abs(questionNow);
         if (actionID === 20) {
             if (pageID === 0) SetupScreen(227);
             else { pageID--; ResultScreen(0); }
@@ -836,15 +971,19 @@ function handleTouch(actionID) {
             pageID++; ResultScreen(0);
         }
         if (actionID === 22) {
-             if (collection[Math.abs(questionNow)] > 0) {
-                 collection[Math.abs(questionNow)]++; 
-             } else {
-                 collection[Math.abs(questionNow)]++;
-             }
-             ResultScreen(1);
+            // Добавить / увеличить количество
+            const current = collection[speciesId] || 0;
+            if (current === 0) {
+                await updateCollection(speciesId, 1);
+            } else {
+                await updateCollection(speciesId, 1);
+            }
+            ResultScreen(1);
         }
-        if (actionID === 23) { // Trash
-            if (collection[Math.abs(questionNow)] > 0) collection[Math.abs(questionNow)]--;
+        if (actionID === 23) { // Удалить / уменьшить количество
+            if (collection[speciesId] > 0) {
+                await updateCollection(speciesId, -1);
+            }
             ResultScreen(1);
         }
     }
@@ -870,12 +1009,13 @@ function handleTouch(actionID) {
             pageID++; LibraryScreen(false);
         }
         if (actionID === 42) {
+            // Сбор элементов из коллекции для определения выбранного вида
             let listSelectHelper = [];
-            for(let i=0; i<collection.length; i++) {
-                if(collection[i] > 0) listSelectHelper.push(i);
+            for (let i = 1; i <= MAX_SPECIES_ID; i++) {
+                if (collection[i] > 0) listSelectHelper.push(i);
             }
             let index = menuItemID + (pageID * 6);
-            if(listSelectHelper[index] !== undefined) {
+            if (listSelectHelper[index] !== undefined) {
                 questionNow = -listSelectHelper[index];
                 ResultScreen(0);
             }
@@ -883,22 +1023,7 @@ function handleTouch(actionID) {
     }
 }
 
-// Launch
+// Запуск приложения с инициализацией
 window.onload = function() {
-    SetupScreen(227);
-
+    initApp();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
