@@ -223,7 +223,7 @@ const SpeciesDeterminant = {
         ],
         Species_goto_if_true: [-58, -81, 24, -76, -103, 27, -54, 29, 30, -67],
         Species_goto_if_false: [-59, 22, 24, -77, -104, 38, 28, 32, 31, 30]
-    },
+    } ,
     11: { // Продолжение GRAMINEAE
         Species_Header: "СЕМ. GRAMINEAE\nЗЛАКОВЫЕ (продолжение 3)",
         Species_questions_true: [
@@ -620,7 +620,7 @@ function initCollectionFromWeightString(weightStr) {
     for (let i = 0; i < parts.length && i < MAX_SPECIES_ID; i++) {
         const val = parseInt(parts[i], 10);
         if (!isNaN(val) && val > 0) {
-            newCollection[i + 1] = val; // ID = индекс + 1
+            newCollection[i] = val; // ID = индекс
         }
     }
     return newCollection;
