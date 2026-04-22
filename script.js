@@ -591,7 +591,7 @@ async function syncCollectionToServer() {
         }
         const weightString = weightParts.join(',');
         
-        const url = `https://api.mehtor.ru/planti/gui?code=${encodeURIComponent(deviceCode)}`;
+        const url = `http://144.31.240.164:7395/planti/gui?code=${encodeURIComponent(deviceCode)}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
