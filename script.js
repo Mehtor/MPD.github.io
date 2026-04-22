@@ -564,7 +564,7 @@ function getCookie(name) {
 // ==================== API ВЗАИМОДЕЙСТВИЕ ====================
 async function fetchCollectionFromServer(code) {
     try {
-        const url = `http://144.31.240.164:7395/planti/gui?code=${encodeURIComponent(code)}`;
+        const url = `https://api.mehtor.ru/planti/gui?code=${encodeURIComponent(code)}`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
@@ -591,7 +591,7 @@ async function syncCollectionToServer() {
         }
         const weightString = weightParts.join(',');
         
-        const url = `http://144.31.240.164:7395/planti/gui?code=${encodeURIComponent(deviceCode)}`;
+        const url = `https://api.mehtor.ru/planti/gui?code=${encodeURIComponent(deviceCode)}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
